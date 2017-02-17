@@ -1,0 +1,33 @@
+{
+  "name": "richardhj/contao-onlinetickets",
+  "description": "Online tickets extension for Isotope eCommerce",
+  "type": "contao-module",
+  "authors": [
+    {
+      "name": "Richard Henkenjohann",
+      "email": "richard@henkenjohann.me",
+      "homepage": "http://henkenjohann.me",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "richard@henkenjohann.me"
+  },
+  "require": {
+    "php": "^5.4 || ^7.0",
+    "isotope/core": "^2.3"
+  },
+  "autoload": {
+    "psr-0": {
+      "OnlineTicket\\": "src/"
+    }
+  },
+  "extra": {
+    "contao": {
+      "sources": {
+        "entrypoint-api": "api",
+        "module": "system/modules/onlinetickets"
+      }
+    }
+  }
+}
