@@ -11,37 +11,36 @@ use Haste\Http\Response\JsonResponse;
 class GetEventsByToken extends Api
 {
 
-	/**
-	 * Output all member assigned events
-	 */
-	public function run()
-	{
-		// Authenticate token
-		$this->authenticateToken();
+    /**
+     * Output all member assigned events
+     */
+    public function run()
+    {
+        // Authenticate token
+        $this->authenticateToken();
 
-		/** @var \Model\Collection|Event $objEvents */
-		$objEvents = Event::findByUser($this->objUser->id);
-		$arrEvents = array();
+        /** @var \Model\Collection|Event $events */
+        $events = Event::findByUser($this->objUser->id);
+        $return = [];
 
-		while ($objEvents->next())
-		{
-			$arrEvent = array
-			(
-				'EventId'               => (int)$objEvents->id,
-				'EventName'             => $objEvents->name,
-				'EventDate'             => (int)$objEvents->date,
-				'CountSoldTickets'      => Ticket::countBy('event_id', $objEvents->id),
-				'CountCheckedInTickets' => Ticket::countBy(array('event_id=?', 'checkin<>0'), array($objEvents->id)),
-			);
+        while ($events->next()) {
+            $event = [
+                'EventId'               => (int) $events->id,
+                'EventName'             => $events->name,
+                'EventDate'             => (int) $events->date,
+                'CountSoldTickets'      => Ticket::countBy('event_id', $events->id),
+                'CountCheckedInTickets' => Ticket::countBy(['event_id=?', 'checkin<>0'], [$events->id]),
+            ];
 
-			$arrEvents[] = $arrEvent;
-		}
+            $return[] = $event;
+        }
 
-		$objResponse = new JsonResponse(array
-		(
-			'Events' => $arrEvents
-		));
+        $response = new JsonResponse(
+            [
+                'Events' => $return
+            ]
+        );
 
-		$objResponse->send();
-	}
+        $response->send();
+    }
 }

@@ -18,41 +18,40 @@ class SetTicketAsRegistered extends Api
         // Authenticate token
         $this->authenticateToken();
 
-        $objTicket = Ticket::findByTicketCode($this->get('ticketcode'));
+        $ticket = Ticket::findByTicketCode($this->get('ticketcode'));
 
         // Exit if ticket not found
-        if (null === $objTicket) {
+        if (null === $ticket) {
             $this->exitTicketNotFound();
         }
 
-        $blnSuccess = false;
+        $success = false;
 
         if ($this->objUser->tickets_defineMode) {
-            $objTicket->agency_id = $this->objUser->tickets_defineModeAgencyId;
-            $objTicket->save();
+            $ticket->agency_id = $this->objUser->tickets_defineModeAgencyId;
+            $ticket->save();
         } else {
             // Check if check in possible and user is not in test mode
-            if ($objTicket->checkInPossible() && !$this->objUser->tickets_testmode) {
-                $objTicket->checkin = time();
-                $objTicket->checkin_user = $this->objUser->id;
+            if ($ticket->checkInPossible() && !$this->objUser->tickets_testmode) {
+                $ticket->checkin      = time();
+                $ticket->checkin_user = $this->objUser->id;
 
-                if ($objTicket->save()) {
-                    $blnSuccess = true;
+                if ($ticket->save()) {
+                    $success = true;
                 }
             }
         }
 
-        $objResponse = new JsonResponse(
-            array
-            (
-                'Checkin' => array
-                (
-                    'Result' => $blnSuccess,
-                ),
-            )
+        $response = new JsonResponse(
+            [
+                'Checkin' =>
+                    [
+                        'Result' => $success,
+                    ],
+            ]
         );
 
-        $objResponse->send();
+        $response->send();
     }
 
 
@@ -61,14 +60,13 @@ class SetTicketAsRegistered extends Api
      */
     protected function exitTicketNotFound()
     {
-        $objResponse = new JsonResponse(
-            array
-            (
+        $response = new JsonResponse(
+            [
                 'Errorcode'    => 4,
                 'Errormessage' => $GLOBALS['TL_LANG']['ERR']['onlinetickets_ticket_not_found'],
-            )
+            ]
         );
 
-        $objResponse->send();
+        $response->send();
     }
 }

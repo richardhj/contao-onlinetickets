@@ -11,65 +11,70 @@ use OnlineTicket\Model\Ticket;
 class GetTicketsByToken extends Api
 {
 
-	/**
-	 * Output all member assigned tickets
-	 */
-	public function run()
-	{
-		// Authenticate token
-		$this->authenticateToken();
+    /**
+     * Output all member assigned tickets
+     */
+    public function run()
+    {
+        // Authenticate token
+        $this->authenticateToken();
 
-		$objTickets = Ticket::findByUser($this->objUser->id);
-		$arrTickets = array();
+        $tickets = Ticket::findByUser($this->objUser->id);
+        $return = [];
 
-		if (null !== $objTickets)
-		{
-			while ($objTickets->next())
-			{
-				// Do not include if ticket is older than submitted timestamp
-				if ($this->get('timestamp') > 1 && ($objTickets->tstamp < $this->get('timestamp') || ($objTickets->checkin && $objTickets->checkin < $this->get('timestamp'))))
-				{
-					continue;
-				}
+        if (null !== $tickets) {
+            while ($tickets->next()) {
+                // Do not include if ticket is older than submitted timestamp
+                if ($this->get('timestamp') > 1
+                    && ($tickets->tstamp < $this->get('timestamp')
+                        || ($tickets->checkin
+                            && $tickets->checkin < $this->get('timestamp')))
+                ) {
+                    continue;
+                }
 
-				/** @var \Isotope\Model\Address $objAddress */
-				/** @noinspection PhpUndefinedMethodInspection */
-				$objAddress = $objTickets->current()->getAddress();
-
-				/** @var \Isotope\Model\ProductCollection $objOrder */
-				$objOrder = $objTickets->getRelated('order_id');
-
-				/** @var \Isotope\Model\OrderStatus $objStatus */
+                /** @var \Isotope\Model\Address $address */
                 /** @noinspection PhpUndefinedMethodInspection */
-                $objStatus = (null === $objOrder) ? null : $objOrder->getRelated('order_status');
+                $address = $tickets->current()->getAddress();
 
-				/** @noinspection PhpUndefinedMethodInspection */
-				$arrTicket = array
-				(
-					'TicketId'          => (int)$objTickets->id,
-					'EventId'           => (int)$objTickets->event_id,
-					'OrderId'           => (int)$objTickets->order_id ?: -(int)$objTickets->agency_id,
-					'TicketCode'        => $objTickets->hash,
-					'AttendeeName'      => (null !== $objAddress) ? sprintf('%s %s', $objAddress->firstname, $objAddress->lastname) : 'Anonym', // @todo lang
-					'TicketStatus'      => $objTickets->current()->isActivated(),
-					'Status'            => (null !== $objStatus) ? $objStatus->getName() : '',
-					'CheckinPossible'   => $objTickets->current()->checkInPossible(),
-					'TicketType'        => $objTickets->getRelated('product_id')->name,
-					'TicketTags'        => '', // comma separated string
-					'TicketCheckinTime' => $objTickets->checkin ? Date::parse('d. F, H:i', $objTickets->checkin) : '',
-					'TicketInfo'        => $objTickets->getRelated('order_id')->notes ?: '',
-					'TicketBarcode'     => $objTickets->event_id .'.'. $objTickets->id
-				);
+                /** @var \Isotope\Model\ProductCollection $order */
+                $order = $tickets->getRelated('order_id');
 
-				$arrTickets[] = $arrTicket;
-			}
-		}
+                /** @var \Isotope\Model\OrderStatus $status */
+                /** @noinspection PhpUndefinedMethodInspection */
+                $status = (null === $order) ? null : $order->getRelated('order_status');
 
-		$objResponse = new JsonResponse(array
-		(
-			'Tickets' => $arrTickets
-		));
+                /** @noinspection PhpUndefinedMethodInspection */
+                $ticket = [
+                    'TicketId'          => (int) $tickets->id,
+                    'EventId'           => (int) $tickets->event_id,
+                    'OrderId'           => (int) $tickets->order_id ?: -(int) $tickets->agency_id,
+                    'TicketCode'        => $tickets->hash,
+                    'AttendeeName'      => (null !== $address) ? sprintf(
+                        '%s %s',
+                        $address->firstname,
+                        $address->lastname
+                    ) : 'Anonym', // @todo lang
+                    'TicketStatus'      => $tickets->current()->isActivated(),
+                    'Status'            => (null !== $status) ? $status->getName() : '',
+                    'CheckinPossible'   => $tickets->current()->checkInPossible(),
+                    'TicketType'        => $tickets->getRelated('product_id')->name,
+                    'TicketTags'        => '', // comma separated string
+                    'TicketCheckinTime' => $tickets->checkin ? Date::parse('d. F, H:i', $tickets->checkin) : '',
+                    'TicketInfo'        => $tickets->getRelated('order_id')->notes ?: '',
+                    'TicketBarcode'     => $tickets->event_id . '.' . $tickets->id
+                ];
 
-		$objResponse->send();
-	}
+                $return[] = $ticket;
+            }
+        }
+
+        $response = new JsonResponse(
+            [
+                'Tickets' => $return
+            ]
+        );
+
+        $response->send();
+    }
 }

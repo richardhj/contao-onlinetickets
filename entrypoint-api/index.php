@@ -58,7 +58,7 @@ class ApiListener extends \Frontend
 
 	    $this->setAction((string) strtok(basename(Environment::get('requestUri')), '?'));
 
-	    foreach (Api::$arrAllowedParams as $param)
+	    foreach (Api::$allowedParams as $param)
 	    {
 		    $this->setParam($param, Input::get($param));
 	    }

@@ -24,44 +24,45 @@ use Contao\Model\Collection;
  * @property int    $ticket_fill_number    The count of figures the ticket number (ID) will be filled up with zeros
  * @property mixed  $ticket_barcode_height The height of the barcode. It is a serialized array from the inputUnit
  *           widget
- * @property mixed  $ticket_qrcode_width   The width and heigt of the qr code. It is a serialized array from the inputUnit widget
+ * @property mixed  $ticket_qrcode_width   The width and heigt of the qr code. It is a serialized array from the
+ *           inputUnit widget
  */
 class Event extends Model
 {
 
-	/**
-	 * The table name
-	 * @var string
-	 */
-	protected static $strTable = 'tl_onlinetickets_events';
+    /**
+     * The table name
+     *
+     * @var string
+     */
+    protected static $strTable = 'tl_onlinetickets_events';
 
 
-	/**
-	 * Get a collection of events by a referenced member
-	 *
-	 * @param integer $intMemberId
-	 *
-	 * @return Collection|null
-	 * @throws \Exception
-	 */
-	public static function findByUser($intMemberId)
-	{
-		$arrEvents = static::getReferenceValues(static::$strTable, 'users', $intMemberId);
+    /**
+     * Get a collection of events by a referenced member
+     *
+     * @param integer $intMemberId
+     *
+     * @return Collection|null
+     * @throws \Exception
+     */
+    public static function findByUser($intMemberId)
+    {
+        $arrEvents = static::getReferenceValues(static::$strTable, 'users', $intMemberId);
 
-		if (!is_array($arrEvents) || empty($arrEvents))
-		{
-			return null;
-		}
+        if (!is_array($arrEvents) || empty($arrEvents)) {
+            return null;
+        }
 
-		$arrEvents = implode(',', $arrEvents);
+        $arrEvents = implode(',', $arrEvents);
 
-		$t = static::$strTable;
+        $t = static::$strTable;
 
-		return static::findBy
-		(
-			array("$t.id IN(" . $arrEvents . ")"),
-			null,
-			array('order' => \Database::getInstance()->findInSet("$t.id", $arrEvents))
-		);
-	}
+        return static::findBy
+        (
+            array("$t.id IN(" . $arrEvents . ")"),
+            null,
+            array('order' => \Database::getInstance()->findInSet("$t.id", $arrEvents))
+        );
+    }
 }

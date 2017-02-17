@@ -2,6 +2,7 @@
 /**
  * FERIENPASS extension for Contao Open Source CMS built on the MetaModels extension
  * Copyright (c) 2015-2015 Richard Henkenjohann
+ *
  * @package Ferienpass
  * @author  Richard Henkenjohann <richard-ferienpass@henkenjohann.me>
  */
@@ -13,168 +14,167 @@ use Haste\IO\Writer\ExcelFileWriter;
 
 class ExcelReport extends ExcelFileWriter
 {
-	protected $arrTmpCurrentRows;
+    protected $arrTmpCurrentRows;
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __construct($strFile = '', $strExtension = '.xlsx')
-	{
-		parent::__construct($strFile, $strExtension);
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct($file = '', $extension = '.xlsx')
+    {
+        parent::__construct($file, $extension);
 
-		if (parent::prepare(new ArrayReader()))
-		{
-			// Set default font size to 12
-			$this->objPHPExcel->getDefaultStyle()->getFont()->setSize(12);
-		}
-	}
-
-
-	/**
-	 * Return the current row
-	 *
-	 * @return int
-	 */
-	public function getCurrentRow()
-	{
-		return $this->currentRow;
-	}
+        if (parent::prepare(new ArrayReader())) {
+            // Set default font size to 12
+            $this->objPHPExcel->getDefaultStyle()->getFont()->setSize(12);
+        }
+    }
 
 
-	/**
-	 * Return the PHPExcel instance
-	 *
-	 * @return \PHPExcel
-	 */
-	public function getPHPExcel()
-	{
-		return $this->objPHPExcel;
-	}
+    /**
+     * Return the current row
+     *
+     * @return int
+     */
+    public function getCurrentRow()
+    {
+        return $this->currentRow;
+    }
 
 
-	/**
-	 * Write row to CSV file
-	 *
-	 * @param   array
-	 *
-	 * @return  bool
-	 */
-	public function writeRow(array $arrData)
-	{
-		if (!is_array($arrData))
-		{
-			return false;
-		}
-
-		$this->currentRow += 1;
-		$currentColumn = 0;
-
-		foreach ($arrData as $varValue)
-		{
-			$this->objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow
-			(
-				$currentColumn++,
-				$this->currentRow,
-				(string)$varValue
-			);
-		}
-
-		return true;
-	}
+    /**
+     * Return the PHPExcel instance
+     *
+     * @return \PHPExcel
+     */
+    public function getPHPExcel()
+    {
+        return $this->objPHPExcel;
+    }
 
 
-	public function switchSheet($intIndex)
-	{
-		// Save current row
-		$this->arrTmpCurrentRows[$this->objPHPExcel->getActiveSheetIndex()] = $this->currentRow;
+    /**
+     * Write row to CSV file
+     *
+     * @param   array
+     *
+     * @return  bool
+     */
+    public function writeRow(array $data)
+    {
+        if (!is_array($data)) {
+            return false;
+        }
 
-		try
-		{
-			$this->objPHPExcel->setActiveSheetIndex($intIndex);
-		}
-		catch (\PHPExcel_Exception $e)
-		{
-			$this->objPHPExcel->createSheet($intIndex);
-			$this->objPHPExcel->setActiveSheetIndex($intIndex);
-		}
+        $this->currentRow += 1;
+        $currentColumn    = 0;
 
-		// Load current row from temp array
-		$this->currentRow = $this->arrTmpCurrentRows[$intIndex] ?: 0;
-	}
+        foreach ($data as $value) {
+            $this->objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow
+            (
+                $currentColumn++,
+                $this->currentRow,
+                (string) $value
+            );
+        }
 
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function finish()
-	{
-		//parent::finish();
-
-		$objWriter = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, $this->strFormat);
-
-		// Disable pre calculation to be able to use new formulas
-		/** @noinspection PhpUndefinedMethodInspection */
-		$objWriter->setPreCalculateFormulas(false);
-
-		$objWriter->save(TL_ROOT . '/' . $this->strFile);
-	}
+        return true;
+    }
 
 
-	/**
-	 * Set the headline 1 style for a given length of columns
-	 *
-	 * @param int $intColumnLength
-	 */
-	public function setH1Style($intColumnLength = 1)
-	{
-		$this->setStyle(1, $intColumnLength)->getFont()
-			->setBold(true)
-			->setSize(18);
-	}
+    public function switchSheet($index)
+    {
+        // Save current row
+        $this->arrTmpCurrentRows[$this->objPHPExcel->getActiveSheetIndex()] = $this->currentRow;
 
-	/**
-	 * Set the headline 2 style for a given length of columns
-	 *
-	 * @param int $intColumnLength
-	 */
-	public function setH2Style($intColumnLength = 1)
-	{
-		$this->setStyle(1, $intColumnLength)->getFont()
-			->setBold(true)
-			->setSize(16);
-	}
+        try {
+            $this->objPHPExcel->setActiveSheetIndex($index);
+        } catch (\PHPExcel_Exception $e) {
+            $this->objPHPExcel->createSheet($index);
+            $this->objPHPExcel->setActiveSheetIndex($index);
+        }
+
+        // Load current row from temp array
+        $this->currentRow = $this->arrTmpCurrentRows[$index] ?: 0;
+    }
 
 
-	/**
-	 * Set the headline 1 style for a given length of columns
-	 *
-	 * @param int $intColumnLength
-	 */
-	public function setH3Style($intColumnLength = 1)
-	{
-		$this->setStyle(1, $intColumnLength)->getFont()
-			->setBold(true);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function finish()
+    {
+        //parent::finish();
+
+        $writer = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, $this->strFormat);
+
+        // Disable pre calculation to be able to use new formulas
+        /** @noinspection PhpUndefinedMethodInspection */
+        $writer->setPreCalculateFormulas(false);
+
+        $writer->save(TL_ROOT . '/' . $this->strFile);
+    }
 
 
-	/**
-	 * @param int $intRowLength    Quantity of rows selected
-	 * @param int $intColumnLength Quantity of columns selected
-	 * @param int $intRowStart     Start point of row selection or <0> to use current row
-	 * @param int $intColumnStart  Start point of column selection
-	 *
-	 * @return \PHPExcel_Style
-	 */
-	public function setStyle($intRowLength = 1, $intColumnLength = 1, $intRowStart = 0, $intColumnStart = 0)
-	{
-		$intRowStart = $intRowStart ?: $this->currentRow;
+    /**
+     * Set the headline 1 style for a given length of columns
+     *
+     * @param int $columnLength
+     */
+    public function setH1Style($columnLength = 1)
+    {
+        $this
+            ->setStyle(1, $columnLength)->getFont()
+            ->setBold(true)
+            ->setSize(18);
+    }
 
-		return $this->objPHPExcel->getActiveSheet()->getStyleByColumnAndRow
-		(
-			$intColumnStart,
-			$intRowStart,
-			$intColumnStart + $intColumnLength - 1,
-			$intRowStart + $intRowLength - 1
-		);
-	}
+    /**
+     * Set the headline 2 style for a given length of columns
+     *
+     * @param int $columnLength
+     */
+    public function setH2Style($columnLength = 1)
+    {
+        $this
+            ->setStyle(1, $columnLength)->getFont()
+            ->setBold(true)
+            ->setSize(16);
+    }
+
+
+    /**
+     * Set the headline 1 style for a given length of columns
+     *
+     * @param int $columnLength
+     */
+    public function setH3Style($columnLength = 1)
+    {
+        $this
+            ->setStyle(1, $columnLength)->getFont()
+            ->setBold(true);
+    }
+
+
+    /**
+     * @param int $rowLength    Quantity of rows selected
+     * @param int $columnLength Quantity of columns selected
+     * @param int $rowStart     Start point of row selection or <0> to use current row
+     * @param int $columnStart  Start point of column selection
+     *
+     * @return \PHPExcel_Style
+     */
+    public function setStyle($rowLength = 1, $columnLength = 1, $rowStart = 0, $columnStart = 0)
+    {
+        $rowStart = $rowStart ?: $this->currentRow;
+
+        return $this
+            ->objPHPExcel
+            ->getActiveSheet()
+            ->getStyleByColumnAndRow(
+                $columnStart,
+                $rowStart,
+                $columnStart + $columnLength - 1,
+                $rowStart + $rowLength - 1
+            );
+    }
 }

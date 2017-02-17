@@ -10,27 +10,27 @@ use OnlineTicket\Api;
 class UserLogin extends Api
 {
 
-	/**
-	 * Login the user
-	 */
-	public function run()
-	{
-		// System login demands post variables
-		Input::setPost('username', $this->get('username'));
-		Input::setPost('password', $this->get('password'));
+    /**
+     * Login the user
+     */
+    public function run()
+    {
+        // System login demands post variables
+        Input::setPost('username', $this->get('username'));
+        Input::setPost('password', $this->get('password'));
 
-		// Login user or exit
-		if (($strHash = $this->objUser->login()) === false)
-		{
-			$this->exitWithError($GLOBALS['TL_LANG']['ERR']['onlinetickets_login_error']);
-		}
+        // Login user or exit
+        if (false === ($hash = $this->objUser->login())) {
+            $this->exitWithError($GLOBALS['TL_LANG']['ERR']['onlinetickets_login_error']);
+        }
 
-		// Return session hash as token
-		$objResponse = new JsonResponse(array
-		(
-			'Token' => $strHash
-		));
+        // Return session hash as token
+        $response = new JsonResponse(
+            [
+                'Token' => $hash
+            ]
+        );
 
-		$objResponse->send();
-	}
+        $response->send();
+    }
 }

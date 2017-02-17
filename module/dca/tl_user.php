@@ -7,7 +7,7 @@
 
 
 foreach ($GLOBALS['TL_DCA']['tl_user']['palettes'] as $name => $palette) {
-    if ($name == '__selector__') {
+    if ('__selector__' === $name) {
         continue;
     }
 
@@ -18,44 +18,43 @@ foreach ($GLOBALS['TL_DCA']['tl_user']['palettes'] as $name => $palette) {
     );
 }
 
-$GLOBALS['TL_DCA']['tl_user']['palettes']['__selector__'][] = 'tickets_defineMode';
+$GLOBALS['TL_DCA']['tl_user']['palettes']['__selector__'][]        = 'tickets_defineMode';
 $GLOBALS['TL_DCA']['tl_user']['subpalettes']['tickets_defineMode'] = 'tickets_defineModeAgencyId';
 
 
-$GLOBALS['TL_DCA']['tl_user']['fields']['tickets_testmode'] = array
-(
+$GLOBALS['TL_DCA']['tl_user']['fields']['tickets_testmode'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_user']['tickets_testmode'],
     'exclude'   => true,
     'inputType' => 'checkbox',
-    'eval'      => array('tl_class' => 'w50 m12'),
+    'eval'      => [
+        'tl_class' => 'w50 m12'
+    ],
     'sql'       => "char(1) NOT NULL default ''",
-);
+];
 
 
-$GLOBALS['TL_DCA']['tl_user']['fields']['tickets_defineMode'] = array
-(
+$GLOBALS['TL_DCA']['tl_user']['fields']['tickets_defineMode'] = [
     'label'     => &$GLOBALS['TL_LANG']['tl_user']['tickets_defineMode'],
     'exclude'   => true,
     'inputType' => 'checkbox',
-    'eval'      => array(
+    'eval'      => [
         'tl_class'       => 'w50 m12 clr',
         'submitOnChange' => true,
-    ),
+    ],
     'sql'       => "char(1) NOT NULL default ''",
-);
+];
 
 
-$GLOBALS['TL_DCA']['tl_user']['fields']['tickets_defineModeAgencyId'] = array
-(
+$GLOBALS['TL_DCA']['tl_user']['fields']['tickets_defineModeAgencyId'] = [
     'label'            => &$GLOBALS['TL_LANG']['tl_user']['tickets_defineModeAgencyId'],
     'exclude'          => true,
     'inputType'        => 'select',
-    'eval'             => array(
+    'eval'             => [
         'tl_class' => 'w50',
-    ),
+    ],
     'options_callback' => function () {
         $agencies = OnlineTicket\Model\Agency::findAll();
-        $return = [];
+        $return   = [];
 
         while ($agencies->next()) {
             $return[$agencies->getRelated('pid')->name][$agencies->id] = $agencies->name;
@@ -64,4 +63,4 @@ $GLOBALS['TL_DCA']['tl_user']['fields']['tickets_defineModeAgencyId'] = array
         return $return;
     },
     'sql'              => "int(10) NOT NULL default '0'",
-);
+];

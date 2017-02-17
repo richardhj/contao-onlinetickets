@@ -20,212 +20,204 @@ use Isotope\Model\Address;
 class Ticket extends Model
 {
 
-	/**
-	 * The table name
-	 *
-	 * @var string
-	 */
-	protected static $strTable = 'tl_onlinetickets_tickets';
+    /**
+     * The table name
+     *
+     * @var string
+     */
+    protected static $strTable = 'tl_onlinetickets_tickets';
 
 
-	/**
-	 * Find tickets by a referenced user
-	 *
-	 * @param integer $intMemberId
-	 * @param array   $arrOptions
-	 *
-	 * @return \Model\Collection|null|Ticket
-	 */
-	public static function findByUser($intMemberId, $arrOptions=array())
-	{
-		$objEvents = Event::findByUser($intMemberId);
+    /**
+     * Find tickets by a referenced user
+     *
+     * @param integer $memberId
+     * @param array   $options
+     *
+     * @return \Model\Collection|null|Ticket
+     */
+    public static function findByUser($memberId, array $options = [])
+    {
+        $events = Event::findByUser($memberId);
 
-		if (null === $objEvents)
-		{
-			return null;
-		}
+        if (null === $events) {
+            return null;
+        }
 
-		return static::findByEvent($objEvents->fetchEach('id'), $arrOptions);
-	}
-
-
-	/**
-	 * Find tickets by event
-	 *
-	 * @param array|integer $varEventId
-	 * @param array         $arrOptions
-	 *
-	 * @return Model\Collection|null|Ticket
-	 */
-	public static function findByEvent($varEventId, $arrOptions=array())
-	{
-		$arrEvents = (array)$varEventId;
-
-		if (empty($arrEvents))
-		{
-			return null;
-		}
-
-		$strEvents = implode(',', array_map('intval', $arrEvents));
-
-		$t = static::$strTable;
-
-		$arrColumn = array("$t.event_id IN(" . $strEvents . ")");
-		$arrValue = null;
-
-		// Check for options that must not be overwritten but merged
-		foreach ($arrOptions as $k => $v)
-		{
-			switch ($k)
-			{
-				case 'column':
-					$arrColumn = array_merge($arrColumn, $v);
-					unset($arrOptions[$k]);
-
-					break;
-				case 'value':
-					$arrValue = array_merge($arrValue, $v);
-					unset ($arrOptions[$k]);
-
-					break;
-			}
-		}
-
-		return static::findBy
-		(
-			$arrColumn,
-			$arrValue,
-			array_merge
-			(
-				array
-				(
-					'order' => 'tstamp,id,' . \Database::getInstance()->findInSet("$t.event_id", $arrEvents)
-				),
-				$arrOptions
-			)
-		);
-	}
+        return static::findByEvent($events->fetchEach('id'), $options);
+    }
 
 
-	/**
-	 * Find online sold tickets
-	 *
-	 * @param array|integer $varEventId
-	 * @param array         $arrOptions
-	 *
-	 * @return Model\Collection|null|Ticket
-	 */
-	public static function findOnlineByEvent($varEventId, $arrOptions = array())
-	{
-		return static::findByEvent($varEventId, array_merge
-		(
-			array
-			(
-				'column' => array('order_id<>0')
-			),
-			$arrOptions
-		));
-	}
+    /**
+     * Find tickets by event
+     *
+     * @param array|integer $eventId
+     * @param array         $options
+     *
+     * @return Model\Collection|null|Ticket
+     */
+    public static function findByEvent($eventId, array $options = [])
+    {
+        $events = (array) $eventId;
+
+        if (empty($events)) {
+            return null;
+        }
+
+        $t = static::$strTable;
+
+        $column = ["$t.event_id IN(" . implode(',', array_map('intval', $events)) . ")"];
+        $value  = null;
+
+        // Check for options that must not be overwritten but merged
+        foreach ($options as $k => $v) {
+            switch ($k) {
+                case 'column':
+                    $column = array_merge($column, $v);
+                    unset($options[$k]);
+
+                    break;
+                case 'value':
+                    $value = array_merge($value, $v);
+                    unset ($options[$k]);
+
+                    break;
+            }
+        }
+
+        return static::findBy
+        (
+            $column,
+            $value,
+            array_merge
+            (
+                [
+                    'order' => 'tstamp,id,' . \Database::getInstance()->findInSet("$t.event_id", $events)
+                ],
+                $options
+            )
+        );
+    }
 
 
-	/**
-	 * Find tickets by its agency
-	 *
-	 * @param integer $intAgencyId
-	 * @param array   $arrOptions
-	 *
-	 * @return \Model\Collection|null|Ticket
-	 */
-	public static function findByAgency($intAgencyId, $arrOptions=array())
-	{
-		return static::findBy('agency_id', $intAgencyId, $arrOptions);
-	}
+    /**
+     * Find online sold tickets
+     *
+     * @param array|integer $eventId
+     * @param array         $options
+     *
+     * @return Model\Collection|null|Ticket
+     */
+    public static function findOnlineByEvent($eventId, array $options = [])
+    {
+        return static::findByEvent(
+            $eventId,
+            array_merge(
+                [
+                    'column' => ['order_id<>0']
+                ],
+                $options
+            )
+        );
+    }
 
 
-	/**
-	 * Find tickets by order
-	 *
-	 * @param integer $intOrderId
-	 * @param array   $arrOptions
-	 *
-	 * @return Model\Collection|null|Ticket
-	 */
-	public static function findByOrder($intOrderId, $arrOptions=array())
-	{
-		return static::findBy('order_id', $intOrderId, $arrOptions);
-	}
+    /**
+     * Find tickets by its agency
+     *
+     * @param integer $agencyId
+     * @param array   $options
+     *
+     * @return \Model\Collection|null|Ticket
+     */
+    public static function findByAgency($agencyId, array $options = [])
+    {
+        return static::findBy('agency_id', $agencyId, $options);
+    }
 
 
-	/**
-	 * Find ticket by ticket code aka hash
-	 *
-	 * @param string $strTicketCode
-	 *
-	 * @return Ticket
-	 */
-	public static function findByTicketCode($strTicketCode)
-	{
-		// Ticket code is barcode
-		if (strpos($strTicketCode, '.') !== false)
-		{
-			list($intEventId, $intTicketId) = array_map('intval', trimsplit('.', $strTicketCode));
-
-			$t = static::$strTable;
-
-			return static::findOneBy(array("$t.event_id=?", "$t.id=?"), array($intEventId, $intTicketId));
-		}
-
-		return static::findOneBy('hash', $strTicketCode);
-	}
+    /**
+     * Find tickets by order
+     *
+     * @param integer $orderId
+     * @param array   $options
+     *
+     * @return Model\Collection|null|Ticket
+     */
+    public static function findByOrder($orderId, array $options = [])
+    {
+        return static::findBy('order_id', $orderId, $options);
+    }
 
 
-	/**
-	 * Get the assigned address model
-	 *
-	 * @return Address
-	 */
-	public function getAddress()
-	{
-		/** @noinspection PhpUndefinedMethodInspection */
-		/** @noinspection PhpUndefinedClassInspection */
-		return Address::findOneBy
-		(
-			array('pid=?', 'ptable=?'),
-			array($this->order_id, 'tl_iso_product_collection')
-		);
-	}
+    /**
+     * Find ticket by ticket code aka hash
+     *
+     * @param string $ticketCode
+     *
+     * @return Ticket
+     */
+    public static function findByTicketCode($ticketCode)
+    {
+        // Ticket code is barcode
+        if (false !== strpos($ticketCode, '.')) {
+            list($intEventId, $intTicketId) = array_map('intval', trimsplit('.', $ticketCode));
+
+            $t = static::$strTable;
+
+            return static::findOneBy(["$t.event_id=?", "$t.id=?"], [$intEventId, $intTicketId]);
+        }
+
+        return static::findOneBy('hash', $ticketCode);
+    }
 
 
-	/**
-	 * Get the ticket status
-	 *
-	 * @return bool True if activated
-	 */
-	public function isActivated()
-	{
-		return ($this->checkin != 0);
-	}
+    /**
+     * Get the assigned address model
+     *
+     * @return Address
+     */
+    public function getAddress()
+    {
+        /** @noinspection PhpUndefinedMethodInspection */
+        /** @noinspection PhpUndefinedClassInspection */
+        return Address::findOneBy(
+            ['pid=?', 'ptable=?'],
+            [$this->order_id, 'tl_iso_product_collection']
+        );
+    }
 
 
-	/**
-	 * Check if check in possible
-	 *
-	 * @return bool True if check in is possible
-	 */
-	public function checkInPossible()
-	{
-		// Check in possible if activation timestamp set and check in timestamp not set
-		return ($this->tstamp != 0 && $this->checkin == 0);
-	}
+    /**
+     * Get the ticket status
+     *
+     * @return bool True if activated
+     */
+    public function isActivated()
+    {
+        return (0 != $this->checkin);
+    }
 
 
-	/**
-	 * Return if ticket was sold online by using the an order id as identifier
-	 *
-	 * @return bool True if sold online
-	 */
-	public function isOnline()
-	{
-		return ($this->order_id != 0);
-	}
+    /**
+     * Check if check in possible
+     *
+     * @return bool True if check in is possible
+     */
+    public function checkInPossible()
+    {
+        // Check in possible if activation timestamp set and check in timestamp not set
+        return (0 != $this->tstamp && 0 == $this->checkin);
+    }
+
+
+    /**
+     * Return if ticket was sold online by using the an order id as identifier
+     *
+     * @return bool True if sold online
+     */
+    public function isOnline()
+    {
+        return (0 != $this->order_id);
+    }
 }

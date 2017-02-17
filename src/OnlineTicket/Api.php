@@ -29,7 +29,7 @@ abstract class Api extends Controller
 	 *
 	 * @var array
 	 */
-	public static $arrAllowedParams = array('token', 'timestamp', 'ticketcode', 'username', 'password', 'vendorid');
+	public static $allowedParams = array('token', 'timestamp', 'ticketcode', 'username', 'password', 'vendorid');
 
 
 	/**

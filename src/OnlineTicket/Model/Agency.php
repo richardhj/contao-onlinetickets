@@ -19,104 +19,100 @@ use Contao\Model;
 class Agency extends Model
 {
 
-	/**
-	 * The table name
-	 *
-	 * @var string
-	 */
-	protected static $strTable = 'tl_onlinetickets_agencies';
+    /**
+     * The table name
+     *
+     * @var string
+     */
+    protected static $strTable = 'tl_onlinetickets_agencies';
 
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __get($strKey)
-	{
-		switch ($strKey)
-		{
-			case 'tickets_generated':
-				return Ticket::countBy('agency_id', $this->id);
-				break;
+    /**
+     * {@inheritdoc}
+     */
+    public function __get($strKey)
+    {
+        switch ($strKey) {
+            case 'tickets_generated':
+                return Ticket::countBy('agency_id', $this->id);
+                break;
 
-			case 'tickets_sold':
-				return $this->tickets_generated - $this->count_tickets_recalled;
-				break;
+            case 'tickets_sold':
+                return $this->tickets_generated - $this->count_tickets_recalled;
+                break;
 
-			case 'tickets_checkedin':
-				return Ticket::countBy(array('agency_id=?', 'checkin<>0'), array($this->id));
-				break;
+            case 'tickets_checkedin':
+                return Ticket::countBy(array('agency_id=?', 'checkin<>0'), array($this->id));
+                break;
 
-			// Get agency's ticket price but inherit event's ticket price
-			case 'ticket_price':
-				/** @noinspection PhpUndefinedMethodInspection */
+            // Get agency's ticket price but inherit event's ticket price
+            case 'ticket_price':
+                /** @noinspection PhpUndefinedMethodInspection */
 
-				return (strlen(parent::__get($strKey)))
-					? parent::__get($strKey)
-					: Event::findByPk($this->pid)->ticket_price;
-				break;
-		}
+                return (strlen(parent::__get($strKey)))
+                    ? parent::__get($strKey)
+                    : Event::findByPk($this->pid)->ticket_price;
+                break;
+        }
 
-		return parent::__get($strKey);
-	}
+        return parent::__get($strKey);
+    }
 
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __isset($strKey)
-	{
-		switch ($strKey)
-		{
-			// Pseudo fields
-			case 'tickets_generated':
-			case 'tickets_sold':
-			case 'tickets_checkedin':
-				return true;
-		}
+    /**
+     * {@inheritdoc}
+     */
+    public function __isset($strKey)
+    {
+        switch ($strKey) {
+            // Pseudo fields
+            case 'tickets_generated':
+            case 'tickets_sold':
+            case 'tickets_checkedin':
+                return true;
+        }
 
-		return parent::__isset($strKey);
-	}
+        return parent::__isset($strKey);
+    }
 
-	/**
-	 * Find agency by a referenced user
-	 *
-	 * @param integer $intMemberId
-	 * @param array   $arrOptions
-	 *
-	 * @return \Model\Collection|null|static
-	 */
-	public static function findByUser($intMemberId, $arrOptions=array())
-	{
-		$objEvents = Event::findByUser($intMemberId);
+    /**
+     * Find agency by a referenced user
+     *
+     * @param integer $intMemberId
+     * @param array   $arrOptions
+     *
+     * @return \Model\Collection|null|static
+     */
+    public static function findByUser($intMemberId, $arrOptions = array())
+    {
+        $objEvents = Event::findByUser($intMemberId);
 
-		if (null === $objEvents)
-		{
-			return null;
-		}
+        if (null === $objEvents) {
+            return null;
+        }
 
-		$arrEvents = $objEvents->fetchEach('id');
+        $arrEvents = $objEvents->fetchEach('id');
 
-		if (empty($arrEvents))
-		{
-			return null;
-		}
+        if (empty($arrEvents)) {
+            return null;
+        }
 
-		$arrEvents = implode(',', array_map('intval', $arrEvents));
+        $arrEvents = implode(',', array_map('intval', $arrEvents));
 
-		$t = static::$strTable;
+        $t = static::$strTable;
 
-		return static::findBy
-		(
-			array("$t.pid IN(" . $arrEvents . ")"),
-			null,
-			array_merge
-			(
-				array
-				(
-					'order' => \Database::getInstance()->findInSet("$t.pid", $arrEvents)
-				),
-				$arrOptions
-			)
-		);
-	}
+        return static::findBy
+        (
+            array("$t.pid IN(" . $arrEvents . ")"),
+            null,
+            array_merge
+            (
+                array
+                (
+                    'order' => \Database::getInstance()->findInSet("$t.pid", $arrEvents)
+                ),
+                $arrOptions
+            )
+        );
+    }
 }
