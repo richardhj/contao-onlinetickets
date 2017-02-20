@@ -3,8 +3,6 @@
 
 namespace OnlineTicket\Model;
 
-use Contao\Model\Collection;
-
 
 class Order
 {
@@ -13,18 +11,18 @@ class Order
      * Get a particular attribute
      * The key id is deceptive and disabled therefore
      *
-     * @param string $strKey
+     * @param string $key
      *
      * @return mixed
      * @throws \Exception
      */
-    public function __get($strKey)
+    public function __get($key)
     {
-        if ($strKey == 'id') {
+        if ('id' === $key) {
             throw new \Exception('Key "id" can not be used. Use key "order_id" instead.');
         }
 
-        return static::__get($strKey);
+        return static::__get($key);
     }
 
 
@@ -32,19 +30,20 @@ class Order
      * Get all orders by a referenced member
      * It's a Ticket model call with orders grouped
      *
-     * @param integer $intMemberId
+     * @param integer $memberId
      *
-     * @return Collection|null|Ticket
+     * @return \Model\Collection|null|Ticket
      */
-    public static function findByUser($intMemberId)
+    public static function findByUser($memberId)
     {
         return Ticket::findByUser(
-            $intMemberId,
-            array
-            (
-                'column' => array('agency_id=0'),
+            $memberId,
+            [
+                'column' => [
+                    'agency_id=0'
+                ],
                 'group'  => 'order_id'
-            )
+            ]
         );
     }
 }

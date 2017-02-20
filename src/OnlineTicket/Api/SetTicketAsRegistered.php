@@ -27,14 +27,14 @@ class SetTicketAsRegistered extends Api
 
         $success = false;
 
-        if ($this->objUser->tickets_defineMode) {
-            $ticket->agency_id = $this->objUser->tickets_defineModeAgencyId;
+        if ($this->user->tickets_defineMode) {
+            $ticket->agency_id = $this->user->tickets_defineModeAgencyId;
             $ticket->save();
         } else {
             // Check if check in possible and user is not in test mode
-            if ($ticket->checkInPossible() && !$this->objUser->tickets_testmode) {
+            if ($ticket->checkInPossible() && !$this->user->tickets_testmode) {
                 $ticket->checkin      = time();
-                $ticket->checkin_user = $this->objUser->id;
+                $ticket->checkin_user = $this->user->id;
 
                 if ($ticket->save()) {
                     $success = true;
@@ -44,10 +44,9 @@ class SetTicketAsRegistered extends Api
 
         $response = new JsonResponse(
             [
-                'Checkin' =>
-                    [
-                        'Result' => $success,
-                    ],
+                'Checkin' => [
+                    'Result' => $success,
+                ],
             ]
         );
 

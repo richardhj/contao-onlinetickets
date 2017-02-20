@@ -85,12 +85,10 @@ class Ticket extends Model
             }
         }
 
-        return static::findBy
-        (
+        return static::findBy(
             $column,
             $value,
-            array_merge
-            (
+            array_merge(
                 [
                     'order' => 'tstamp,id,' . \Database::getInstance()->findInSet("$t.event_id", $events)
                 ],

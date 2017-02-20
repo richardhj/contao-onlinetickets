@@ -19,7 +19,7 @@ class GetTicketsByToken extends Api
         // Authenticate token
         $this->authenticateToken();
 
-        $tickets = Ticket::findByUser($this->objUser->id);
+        $tickets = Ticket::findByUser($this->user->id);
         $return = [];
 
         if (null !== $tickets) {

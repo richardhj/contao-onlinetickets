@@ -20,7 +20,7 @@ class UserLogin extends Api
         Input::setPost('password', $this->get('password'));
 
         // Login user or exit
-        if (false === ($hash = $this->objUser->login())) {
+        if (false === ($hash = $this->user->login())) {
             $this->exitWithError($GLOBALS['TL_LANG']['ERR']['onlinetickets_login_error']);
         }
 

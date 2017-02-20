@@ -30,9 +30,9 @@ class Agency extends Model
     /**
      * {@inheritdoc}
      */
-    public function __get($strKey)
+    public function __get($key)
     {
-        switch ($strKey) {
+        switch ($key) {
             case 'tickets_generated':
                 return Ticket::countBy('agency_id', $this->id);
                 break;
@@ -42,29 +42,29 @@ class Agency extends Model
                 break;
 
             case 'tickets_checkedin':
-                return Ticket::countBy(array('agency_id=?', 'checkin<>0'), array($this->id));
+                return Ticket::countBy(['agency_id=?', 'checkin<>0'], array($this->id));
                 break;
 
             // Get agency's ticket price but inherit event's ticket price
             case 'ticket_price':
                 /** @noinspection PhpUndefinedMethodInspection */
 
-                return (strlen(parent::__get($strKey)))
-                    ? parent::__get($strKey)
+                return (strlen(parent::__get($key)))
+                    ? parent::__get($key)
                     : Event::findByPk($this->pid)->ticket_price;
                 break;
         }
 
-        return parent::__get($strKey);
+        return parent::__get($key);
     }
 
 
     /**
      * {@inheritdoc}
      */
-    public function __isset($strKey)
+    public function __isset($key)
     {
-        switch ($strKey) {
+        switch ($key) {
             // Pseudo fields
             case 'tickets_generated':
             case 'tickets_sold':
@@ -72,46 +72,43 @@ class Agency extends Model
                 return true;
         }
 
-        return parent::__isset($strKey);
+        return parent::__isset($key);
     }
 
     /**
      * Find agency by a referenced user
      *
-     * @param integer $intMemberId
-     * @param array   $arrOptions
+     * @param integer $memberId
+     * @param array   $options
      *
      * @return \Model\Collection|null|static
      */
-    public static function findByUser($intMemberId, $arrOptions = array())
+    public static function findByUser($memberId, array $options = [])
     {
-        $objEvents = Event::findByUser($intMemberId);
+        $events = Event::findByUser($memberId);
 
-        if (null === $objEvents) {
+        if (null === $events) {
             return null;
         }
 
-        $arrEvents = $objEvents->fetchEach('id');
+        $eventIds = $events->fetchEach('id');
 
-        if (empty($arrEvents)) {
+        if (empty($eventIds)) {
             return null;
         }
 
-        $arrEvents = implode(',', array_map('intval', $arrEvents));
+        $eventIds = implode(',', array_map('intval', $eventIds));
 
         $t = static::$strTable;
 
-        return static::findBy
-        (
-            array("$t.pid IN(" . $arrEvents . ")"),
+        return static::findBy(
+            ["$t.pid IN(" . $eventIds . ")"],
             null,
-            array_merge
-            (
-                array
-                (
-                    'order' => \Database::getInstance()->findInSet("$t.pid", $arrEvents)
-                ),
-                $arrOptions
+            array_merge(
+                [
+                    'order' => \Database::getInstance()->findInSet("$t.pid", $eventIds)
+                ],
+                $options
             )
         );
     }

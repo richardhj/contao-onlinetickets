@@ -3,7 +3,7 @@
 
 namespace OnlineTicket\Model;
 
-use Haste\Model\Model;
+use Haste\Model\Model as HasteModel;
 use Contao\Model\Collection;
 
 /**
@@ -27,7 +27,7 @@ use Contao\Model\Collection;
  * @property mixed  $ticket_qrcode_width   The width and heigt of the qr code. It is a serialized array from the
  *           inputUnit widget
  */
-class Event extends Model
+class Event extends HasteModel
 {
 
     /**
@@ -41,28 +41,27 @@ class Event extends Model
     /**
      * Get a collection of events by a referenced member
      *
-     * @param integer $intMemberId
+     * @param integer $memberId
      *
      * @return Collection|null
      * @throws \Exception
      */
-    public static function findByUser($intMemberId)
+    public static function findByUser($memberId)
     {
-        $arrEvents = static::getReferenceValues(static::$strTable, 'users', $intMemberId);
+        $events = static::getReferenceValues(static::$strTable, 'users', $memberId);
 
-        if (!is_array($arrEvents) || empty($arrEvents)) {
+        if (!is_array($events) || empty($events)) {
             return null;
         }
 
-        $arrEvents = implode(',', $arrEvents);
+        $events = implode(',', $events);
 
         $t = static::$strTable;
 
-        return static::findBy
-        (
-            array("$t.id IN(" . $arrEvents . ")"),
+        return static::findBy(
+            ["$t.id IN(" . $events . ")"],
             null,
-            array('order' => \Database::getInstance()->findInSet("$t.id", $arrEvents))
+            ['order' => \Database::getInstance()->findInSet("$t.id", $events)]
         );
     }
 }

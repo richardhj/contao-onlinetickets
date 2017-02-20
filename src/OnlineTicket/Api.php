@@ -10,96 +10,96 @@ use OnlineTicket\Helper\ApiUser;
 abstract class Api extends Controller
 {
 
-	/**
-	 * The submitted parameters
-	 *
-	 * @var array
-	 */
-	protected $arrParams;
+    /**
+     * The submitted parameters
+     *
+     * @var array
+     */
+    protected $params;
 
 
-	/**
-	 * @var ApiUser
-	 */
-	protected $objUser;
+    /**
+     * @var ApiUser
+     */
+    protected $user;
 
 
-	/**
-	 * The allowed parameters
-	 *
-	 * @var array
-	 */
-	public static $allowedParams = array('token', 'timestamp', 'ticketcode', 'username', 'password', 'vendorid');
+    /**
+     * The allowed parameters
+     *
+     * @var array
+     */
+    public static $allowedParams = ['token', 'timestamp', 'ticketcode', 'username', 'password', 'vendorid'];
 
 
-	/**
-	 * Process parameters
-	 *
-	 * @param array $arrParams
-	 */
-	public function __construct($arrParams)
-	{
-		parent::__construct();
+    /**
+     * Process parameters
+     *
+     * @param array $params
+     */
+    public function __construct($params)
+    {
+        parent::__construct();
 
-		$this->loadLanguageFile('default');
+        $this->loadLanguageFile('default');
 
-		$this->objUser = ApiUser::getInstance();
+        $this->user = ApiUser::getInstance();
 
-		$this->arrParams = $arrParams;
+        $this->params = $params;
 
-		if (empty($this->arrParams))
-		{
-			throw new \InvalidArgumentException('Arguments are missing.');
-		}
-	}
-
-
-	/**
-	 * Get a submitted parameter
-	 *
-	 * @param string $strKey
-	 *
-	 * @return mixed
-	 */
-	protected function get($strKey)
-	{
-		if (isset($this->arrParams[$strKey]))
-		{
-			return $this->arrParams[$strKey];
-		}
-
-		throw new \RuntimeException(sprintf('Invalid key %s', $strKey));
-	}
+        if (empty($this->params)) {
+            throw new \InvalidArgumentException('Arguments are missing.');
+        }
+    }
 
 
-	/**
-	 * Authenticate the submitted token or exit otherwise
-	 */
-	protected function authenticateToken()
-	{
-		if (!$this->objUser->authenticate($this->get('token')))
-		{
-			$this->exitWithError($GLOBALS['TL_LANG']['ERR']['onlinetickets_authentication_error']);
-		}
-	}
+    /**
+     * Get a submitted parameter
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    protected function get($key)
+    {
+        if (isset($this->params[$key])) {
+            return $this->params[$key];
+        }
+
+        throw new \RuntimeException(sprintf('Invalid key %s', $key));
+    }
 
 
-	/**
-	 * Exit with json formatted error message
-	 *
-	 * @param string $strMessage
-	 */
-	protected function exitWithError($strMessage='')
-	{
-		$objResponse = new JsonResponse(array
-		(
-			'Errorcode'    => 1,
-			'Errormessage' => ($strMessage != '') ? $strMessage : $GLOBALS['TL_LANG']['ERR']['onlinetickets_default']
-		));
-
-		$objResponse->send();
-	}
+    /**
+     * Authenticate the submitted token or exit otherwise
+     */
+    protected function authenticateToken()
+    {
+        if (!$this->user->setHash($this->get('token'))->authenticate()) {
+            $this->exitWithError($GLOBALS['TL_LANG']['ERR']['onlinetickets_authentication_error']);
+        }
+    }
 
 
-	abstract public function run();
+    /**
+     * Exit with json formatted error message
+     *
+     * @param string $message
+     */
+    protected function exitWithError($message = '')
+    {
+        $response = new JsonResponse(
+            [
+                'Errorcode'    => 1,
+                'Errormessage' => ('' !== $message)
+                    ? $message
+                    : $GLOBALS['TL_LANG']['ERR']['onlinetickets_default']
+            ]
+        );
+
+        $response->send();
+    }
+
+
+    abstract public function run();
 }

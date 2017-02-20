@@ -21,7 +21,7 @@ class GetOrdersByToken extends Api
         $this->authenticateToken();
 
         /** @type \Contao\Model\Collection|Ticket $orders */
-        $orders = Order::findByUser($this->objUser->id);
+        $orders = Order::findByUser($this->user->id);
         $return = [];
 
         if (null !== $orders) {
@@ -58,7 +58,7 @@ class GetOrdersByToken extends Api
 
         // Fetch agencies too
         /** @var \Model\Collection|Agency $agencies */
-        $agencies = Agency::findByUser($this->objUser->id);
+        $agencies = Agency::findByUser($this->user->id);
 
         if (null !== $agencies) {
             while ($agencies->next()) {

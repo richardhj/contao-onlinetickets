@@ -3,6 +3,7 @@
 namespace OnlineTicket\Helper;
 
 use Contao\System;
+use Isotope\Model\ProductCollectionItem;
 use OnlineTicket\Model\Ticket;
 use Isotope\Model\ProductCollection\Order;
 
@@ -20,7 +21,7 @@ class Checkout
      */
     public function setTicketsInDatabase(Order $order)
     {
-        /** @type \Contao\Model $item */
+        /** @var ProductCollectionItem|\Model $item */
         foreach ($order->getItems() as $item) {
             $product = $item->getRelated('product_id');
 
@@ -36,7 +37,7 @@ class Checkout
                 $ticket->event_id   = $product->event;
                 $ticket->order_id   = $order->id;
                 $ticket->item_id    = $item->id;
-                $ticket->hash       = md5(implode('-', array($order->uniqid, $item->id, $i)));
+                $ticket->hash       = md5(implode('-', [$order->uniqid, $item->id, $i]));
                 $ticket->product_id = $item->product_id;
 
                 if (!$ticket->save()) {

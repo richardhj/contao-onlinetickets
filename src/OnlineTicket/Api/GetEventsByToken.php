@@ -20,7 +20,7 @@ class GetEventsByToken extends Api
         $this->authenticateToken();
 
         /** @var \Model\Collection|Event $events */
-        $events = Event::findByUser($this->objUser->id);
+        $events = Event::findByUser($this->user->id);
         $return = [];
 
         while ($events->next()) {

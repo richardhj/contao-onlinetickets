@@ -2,12 +2,8 @@
 
 namespace OnlineTicket\Helper;
 
-use Contao\User;
-use Contao\Environment;
-use Contao\SessionModel;
 
-
-class ApiUser extends User
+class ApiUser extends \User
 {
 
     /**
@@ -41,22 +37,33 @@ class ApiUser extends User
     {
         parent::__construct();
 
-        $this->strIp = Environment::get('ip');
+        $this->strIp = \Environment::get('ip');
+    }
+
+
+    /**
+     * Set the user hash
+     *
+     * @param $hash
+     *
+     * @return $this
+     */
+    public function setHash($hash)
+    {
+        $this->strHash = $hash;
+
+        return $this;
     }
 
 
     /**
      * Authenticate a user
      *
-     * @param string $strHash
-     *
      * @return bool
      */
-    public function authenticate($strHash)
+    public function authenticate()
     {
-        $this->strHash = $strHash;
-
-        $session = SessionModel::findBy(['hash=?', 'name=?'], [$this->strHash, $this->strCookie]);
+        $session = \SessionModel::findBy(['hash=?', 'name=?'], [$this->strHash, $this->strCookie]);
 
         // Try to find the session in the database
         if (null === $session) {
@@ -68,7 +75,8 @@ class ApiUser extends User
         $time = time();
 
         // Validate the session
-        if ((!\Config::get('disableIpCheck') && $session->ip != $this->strIp) || $session->hash != $this->strHash
+        if ((!\Config::get('disableIpCheck') && $session->ip != $this->strIp)
+            || $session->hash !== $this->strHash
             || ($session->tstamp + \Config::get('sessionTimeout')) < $time
         ) {
             $this->log('Could not verify the session', __METHOD__, TL_ACCESS);
@@ -79,7 +87,7 @@ class ApiUser extends User
         $this->intId = $session->pid;
 
         // Load the user object
-        if ($this->findBy('id', $this->intId) == false) {
+        if (false === $this->findBy('id', $this->intId)) {
             $this->log('Could not find the session user', __METHOD__, TL_ACCESS);
 
             return false;
@@ -132,7 +140,7 @@ class ApiUser extends User
         if (is_array($this->session)) {
             $this->Session->setData($this->session);
         } else {
-            $this->session = array();
+            $this->session = [];
         }
     }
 
