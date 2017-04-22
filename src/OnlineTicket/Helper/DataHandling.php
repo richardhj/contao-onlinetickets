@@ -112,7 +112,7 @@ class DataHandling
         // Set font
         $pdf->SetFont(
             $event->ticket_font_family ?: PDF_FONT_NAME_MAIN,
-            implode('', deserialize($event->ticket_font_style)) ?: '',
+            ('' === $event->ticket_font_style) ?: implode('', deserialize($event->ticket_font_style)) ?: '',
             static::getInputUnitValue($event->ticket_font_size) ?: PDF_FONT_SIZE_MAIN
         );
 
@@ -133,7 +133,7 @@ class DataHandling
                             0,
                             str_pad(
                                 $tickets->$element['te_element'],
-                                $event->ticket_fill_number,
+                                (int)$event->ticket_fill_number,
                                 '0',
                                 STR_PAD_LEFT
                             ),
