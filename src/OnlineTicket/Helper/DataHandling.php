@@ -112,7 +112,7 @@ class DataHandling
         // Set font
         $pdf->SetFont(
             $event->ticket_font_family ?: PDF_FONT_NAME_MAIN,
-            ('' === $event->ticket_font_style) ?: implode('', deserialize($event->ticket_font_style)) ?: '',
+            ('' === $event->ticket_font_style) ?: (implode('', deserialize($event->ticket_font_style)) ?: ''),
             static::getInputUnitValue($event->ticket_font_size) ?: PDF_FONT_SIZE_MAIN
         );
 
@@ -132,7 +132,7 @@ class DataHandling
                             0,
                             0,
                             str_pad(
-                                $tickets->$element['te_element'],
+                                $tickets->{$element['te_element']},
                                 (int)$event->ticket_fill_number,
                                 '0',
                                 STR_PAD_LEFT
@@ -152,7 +152,7 @@ class DataHandling
                         $pdf->MultiCell(
                             0,
                             0,
-                            $event->$element['te_element'],
+                            $event->{$element['te_element']},
                             0,
                             'J',
                             false,
