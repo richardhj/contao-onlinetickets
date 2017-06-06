@@ -7,7 +7,7 @@ use Haste\Http\Response\JsonResponse;
 use OnlineTicket\Helper\ApiUser;
 
 
-abstract class Api extends Controller
+abstract class AbstractApi extends Controller
 {
 
     /**

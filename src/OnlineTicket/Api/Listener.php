@@ -3,7 +3,7 @@
 namespace OnlineTicket\Api;
 
 use Haste\Http\Response\Response;
-use OnlineTicket\Api;
+use OnlineTicket\AbstractApi;
 
 
 class Listener extends \Frontend
@@ -38,7 +38,7 @@ class Listener extends \Frontend
 
         $this->setAction((string) strtok(basename(\Environment::get('requestUri')), '?'));
 
-        foreach (Api::$allowedParams as $param) {
+        foreach (AbstractApi::$allowedParams as $param) {
             $this->setParam($param, \Input::get($param));
         }
     }
@@ -92,7 +92,7 @@ class Listener extends \Frontend
             $class = '\OnlineTicket\Api\\' . ucfirst($this->getAction());
 
             if (class_exists($class)) {
-                /** @type Api $action */
+                /** @type AbstractApi $action */
                 $action = new $class($this->params);
 
                 $action->run();

@@ -3,13 +3,13 @@
 namespace OnlineTicket\Api;
 
 use Haste\Http\Response\JsonResponse;
-use OnlineTicket\Api;
+use OnlineTicket\AbstractApi;
 use OnlineTicket\Model\Agency;
 use OnlineTicket\Model\Order;
 use OnlineTicket\Model\Ticket;
 
 
-class GetOrdersByToken extends Api
+class GetOrdersByToken extends AbstractApi
 {
 
     /**

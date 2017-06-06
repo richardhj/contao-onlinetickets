@@ -2,13 +2,13 @@
 
 namespace OnlineTicket\Api;
 
-use OnlineTicket\Api;
+use OnlineTicket\AbstractApi;
 use OnlineTicket\Model\Event;
 use OnlineTicket\Model\Ticket;
 use Haste\Http\Response\JsonResponse;
 
 
-class GetEventsByToken extends Api
+class GetEventsByToken extends AbstractApi
 {
 
     /**

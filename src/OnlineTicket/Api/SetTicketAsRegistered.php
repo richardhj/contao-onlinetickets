@@ -3,11 +3,11 @@
 namespace OnlineTicket\Api;
 
 use Haste\Http\Response\JsonResponse;
-use OnlineTicket\Api;
+use OnlineTicket\AbstractApi;
 use OnlineTicket\Model\Ticket;
 
 
-class SetTicketAsRegistered extends Api
+class SetTicketAsRegistered extends AbstractApi
 {
 
     /**

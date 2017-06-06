@@ -4,11 +4,11 @@ namespace OnlineTicket\Api;
 
 use Contao\Date;
 use Haste\Http\Response\JsonResponse;
-use OnlineTicket\Api;
+use OnlineTicket\AbstractApi;
 use OnlineTicket\Model\Ticket;
 
 
-class GetTicketsByToken extends Api
+class GetTicketsByToken extends AbstractApi
 {
 
     /**
