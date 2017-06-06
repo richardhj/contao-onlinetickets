@@ -15,7 +15,8 @@
   },
   "require": {
     "php": "^5.4 || ^7.0",
-    "isotope/isotope-core": "^2.3"
+    "isotope/isotope-core": "^2.3",
+    "cliffparnitzky/user-member-bridge": "dev-master"
   },
   "autoload": {
     "psr-0": {
@@ -26,8 +27,15 @@
     "contao": {
       "sources": {
         "entrypoint-api": "api",
+        "assets": "assets/tickets",
         "module": "system/modules/onlinetickets"
       }
     }
-  }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/richardhj/contao-user-member-bridge.git"
+    }
+  ]
 }
