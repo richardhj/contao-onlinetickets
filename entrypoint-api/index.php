@@ -2,18 +2,14 @@
 
 
 /**
- * Set the script name
- */
-define('TL_SCRIPT', 'api/index.php');
-
-
-/**
  * Initialize the system
  */
-require_once('../system/initialize.php');
-
+define('TL_SCRIPT', 'api/index.php');
 define('TL_MODE', 'FE');
 define('BYPASS_TOKEN_CHECK', true);
+
+require_once('../../../../../system/initialize.php');
+
 
 /**
  * Run the controller
