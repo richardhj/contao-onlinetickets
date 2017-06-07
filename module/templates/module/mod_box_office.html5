@@ -1,0 +1,56 @@
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<?php if ($this->noEvents): ?>
+    <?= $this->noEventsMsg ?>
+<?php else: ?>
+    <?= $this->manualCheckInForm ?>
+    <p class="count-checked-in"><?= $this->countCheckedInTickets ?></p>
+    <?php if (!empty($this->lastCheckedInTable)): ?>
+        <h2><?= $this->lastCheckedInHeadline ?></h2>
+        <table>
+            <?php $colKeys = array_keys($this->lastCheckedInTable[0]); ?>
+            <thead>
+            <tr>
+                <?php foreach ($colKeys as $th): ?>
+                    <th>
+                        <?= $this->translator->translate('boxoffice.' . $th, 'MSC'); ?>
+                    </th>
+                <?php endforeach; ?>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($this->lastCheckedInTable as $row): ?>
+                <tr>
+                    <?php foreach ($row as $col): ?>
+                        <td><?= $col; ?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif ?>
+    <h2><?= $this->ticketCountsHeadline ?></h2>
+    <table>
+        <thead>
+        <tr>
+            <th><?= $this->translator->translate('boxoffice.agency', 'MSC'); ?></th>
+            <th><?= $this->translator->translate('boxoffice.count_sold', 'MSC'); ?></th>
+            <th><?= $this->translator->translate('boxoffice.count_checked_in', 'MSC'); ?></th>
+            <th><?= $this->translator->translate('boxoffice.count_check_in_left', 'MSC'); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($this->ticketCounts as $row): ?>
+            <tr>
+                <td><?= $row['name'] ?></td>
+                <td><?= $row['countSold'] ?></td>
+                <td><?= $row['countCheckedIn'] ?></td>
+                <td><?= $row['countSold'] - $row['countCheckedIn'] ?></td>
+            </tr>
+        <?php endforeach ?>
+        </tbody>
+    </table>
+<?php endif ?>
+<?php $this->endblock(); ?>

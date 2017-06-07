@@ -7,7 +7,7 @@
 $GLOBALS['TL_DCA']['tl_onlinetickets_agencies'] = [
 
     // Config
-    'config'   => [
+    'config'       => [
         'dataContainer'   => 'Table',
         'ptable'          => 'tl_onlinetickets_events',
         //'ctable'                      => array('tl_onlinetickets_agencies_tickets'),
@@ -24,7 +24,7 @@ $GLOBALS['TL_DCA']['tl_onlinetickets_agencies'] = [
     ],
 
     // List
-    'list'     => [
+    'list'         => [
         'sorting'           => [
             'mode'                  => 4,
             'fields'                => [
@@ -80,12 +80,22 @@ $GLOBALS['TL_DCA']['tl_onlinetickets_agencies'] = [
     ],
 
     // Palettes
-    'palettes' => [
-        'default' => '{title_legend},name;{config_legend},count_tickets,count_tickets_recalled,ticket_price'
+    'metapalettes' => [
+        'default' => [
+            'title'  => [
+                'name'
+            ],
+            'config' => [
+                'count_tickets',
+                'count_tickets_recalled',
+                'ticket_price',
+                'box_office_checkin'
+            ],
+        ]
     ],
 
     // Fields
-    'fields'   => [
+    'fields'       => [
         'id'                     => [
             'sql' => "int(10) unsigned NOT NULL auto_increment"
         ],
@@ -148,6 +158,14 @@ $GLOBALS['TL_DCA']['tl_onlinetickets_agencies'] = [
                 'rgxp'     => 'digit'
             ],
             'sql'       => "varchar(32) NOT NULL default ''"
+        ],
+        'box_office_checkin'     => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['box_office_checkin'],
+            'inputType' => 'checkbox',
+            'eval'      => [
+                'tl_class' => 'w50 m12'
+            ],
+            'sql'       => "char(1) NOT NULL default ''"
         ]
     ]
 ];

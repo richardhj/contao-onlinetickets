@@ -24,3 +24,11 @@ $GLOBALS['TL_LANG']['MSC']['tickets_sold']      = 'Tickets verkauft';
 $GLOBALS['TL_LANG']['MSC']['tickets_checkedin'] = 'Tickets eingelassen';
 $GLOBALS['TL_LANG']['MSC']['tickets_sales']     = 'Einnahmen';
 $GLOBALS['TL_LANG']['MSC']['total']             = 'Gesamt';
+// Box office
+$GLOBALS['TL_LANG']['MSC']['boxoffice']['checkin']             = 'Einlassdatum';
+$GLOBALS['TL_LANG']['MSC']['boxoffice']['agency']              = 'Ticketstelle';
+$GLOBALS['TL_LANG']['MSC']['boxoffice']['checkin_user']        = 'Benutzer';
+$GLOBALS['TL_LANG']['MSC']['boxoffice']['undo']                = 'Checkin rückgängig machen';
+$GLOBALS['TL_LANG']['MSC']['boxoffice']['count_sold']          = 'Anzahl Tickets verkauft';
+$GLOBALS['TL_LANG']['MSC']['boxoffice']['count_checked_in']    = 'Anzahl Tickets eingelassen';
+$GLOBALS['TL_LANG']['MSC']['boxoffice']['count_check_in_left'] = 'Noch Einlass zu gewähren';

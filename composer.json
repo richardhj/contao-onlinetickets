@@ -16,7 +16,11 @@
   "require": {
     "php": "^5.4 || ^7.0",
     "isotope/isotope-core": "^2.3",
-    "cliffparnitzky/user-member-bridge": "dev-master"
+    "cliffparnitzky/user-member-bridge": "dev-master",
+    "contao-community-alliance/dependency-container": "^1.8",
+    "contao-community-alliance/url-builder": "^1.2",
+    "contao-community-alliance/meta-palettes": "^1.10",
+    "contao-community-alliance/translator": "^2.0"
   },
   "autoload": {
     "psr-0": {

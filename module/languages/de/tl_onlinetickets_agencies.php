@@ -21,6 +21,8 @@ $GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['count_tickets_recalled'][0] = 
 $GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['count_tickets_recalled'][1] = 'Geben Sie hier die Anzahl der Tickets ein, die von der Vorverkaufsstelle nicht verkauft worden sind.';
 $GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['ticket_price'][0]           = 'Ticket-Preis';
 $GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['ticket_price'][1]           = 'Geben Sie hier den Preis des Tickets ein, der für die Vorverkaufsstelle zählt.';
+$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['box_office_checkin'][0]     = 'Tageskasse-Checkin';
+$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['box_office_checkin'][1]     = 'An der Abendkasse können Tickets zu dieser Ticketstelle eingecheckt werden.';
 
 
 /**

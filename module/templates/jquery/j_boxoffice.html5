@@ -1,0 +1,67 @@
+
+<script>
+    $(function() {
+        $('#ctrl_count').focus();
+    });
+//    $(document).on('submit', '.mod_boxoffice form', function (event) {
+//        var form = $(this);
+//
+//        event.preventDefault();
+//
+//        var element = $(this).closest('[class^="ce_"],[class^="mod_"]');
+////        element.addClass('ajax-reload-element-overlay');
+//
+//        var params = {};
+//        form.attr('action').replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){params[k]=v});
+//
+//        $.ajax({
+//            method: 'POST',
+//            url: 'SimpleAjaxFrontend.php?' + jQuery.param({
+//                action: 'reload-element',
+//                element: element.attr('data-ajax-reload-element'),
+//                requestUri: decodeURIComponent(params['requestUri']),
+//                page: <?//= $GLOBALS['objPage']->id ?>//,
+//                REQUEST_TOKEN: form.find('[name=REQUEST_TOKEN]').val()
+//            }),
+//            data: form.serialize()
+//        })
+//            .done(function (response, status, xhr) {
+//
+//                if (status != 'nocontent') {
+//                    if (response.status == 'ok') {
+//                        $('<div class="boxoffice_checkin_confirmation></div>').appendTo('body');
+//                        alert('asd');
+////                        element.replaceWith(response.html);
+//                    }
+//                    alert('re');
+////                        location.reload();
+//                }
+//            });
+//    });
+
+//    window.setInterval(function () {
+//        var element = $(".mod_boxoffice");
+//        element.addClass('ajax-reload-element-overlay');
+//
+//        $.ajax({
+//            method: 'GET',
+//            url: 'SimpleAjaxFrontend.php',
+//            data: {
+//                action: 'reload-element',
+//                element: element.attr('data-ajax-reload-element'),
+//                requestUri: location.href,
+//                page: <?//= $GLOBALS['objPage']->id ?>
+//            }
+//        })
+//            .done(function (response) {
+//                if (response.status == 'ok') {
+//                    // Replace the DOM
+//                    element.replaceWith(response.html);
+//                }
+//                else {
+//                    // Reload the page as fallback
+//                    location.reload();
+//                }
+//            });
+//    }, 5000);
+</script>

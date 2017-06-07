@@ -21,6 +21,12 @@ $GLOBALS['BE_MOD']['isotope']['onlinetickets_events'] = [
 
 
 /**
+ * Front end modules
+ */
+$GLOBALS['FE_MOD']['application']['boxoffice'] = 'OnlineTicket\Module\BoxOffice';
+
+
+/**
  * Models
  */
 $GLOBALS['TL_MODELS'][\OnlineTicket\Model\Event::getTable()]  = 'OnlineTicket\Model\Event';
