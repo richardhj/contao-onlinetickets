@@ -161,7 +161,7 @@ class BoxOffice extends AbstractFrontendModule
             $row['agency']       = $agency->name;
             $row['checkin_user'] = $lastCheckedIn->getRelated('checkin_user')->name;
             $row['undo']         = ($lastCheckedIn->checkin_user === $user->id) ? sprintf(
-                '<a href="%s" class="undo">%s</a>',
+                '<a href="%s" onclick="if(!confirm(\'Möchten Sie den Check-In wirklich zurücksetzen?\')) return false;" class="undo">%s</a>',
                 $urlBuilder
                     ->setQueryParameter('action', 'undo')
                     ->setQueryParameter('ticket_id', $lastCheckedIn->id)
