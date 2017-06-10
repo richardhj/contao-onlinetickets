@@ -32,11 +32,15 @@ class GetOrdersByToken extends AbstractApi
                 }
 
                 /** @var \Isotope\Model\Address $address */
-                /** @noinspection PhpUndefinedMethodInspection */
                 $address = $orders->current()->getAddress();
 
+                $isotopeOrder = $orders->getRelated('order_id');
+                if (null === $isotopeOrder) {
+                    continue;
+                }
+
                 /** @var \Isotope\Model\OrderStatus $status */
-                $status = $orders->getRelated('order_id')->getRelated('order_status');
+                $status = $isotopeOrder->getRelated('order_status');
 
                 /** @type \Contao\Model\Collection $tickets */
                 $tickets = Ticket::findByOrder($orders->order_id);
@@ -69,6 +73,9 @@ class GetOrdersByToken extends AbstractApi
 
                 /** @type \Contao\Model\Collection $objTickets */
                 $tickets = Ticket::findByAgency($agencies->id);
+                if (null === $tickets) {
+                    continue;
+                }
 
                 $order = [
                     'OrderId'          => -(int) $agencies->id, # prefix minus to differentiate from online orders
