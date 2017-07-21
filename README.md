@@ -14,11 +14,18 @@ If you sell hardtickets and want to track sales, this extension provides tool to
 
 ### During the event
 
+#### Check in
+
 Check in all sold tickets (hardtickets or online tickets) and track venue's degree of capacity.
 
 The included api is fully compatible with the ones of [TicketPay](http://ticketpay.de/). Install the iOS native [mobile app](http://ticketpay.de/app-demo/) to perform the checkin.
 
 ![app](http://ticketpay.de/wp-content/uploads/2013/09/app1.png)
+
+#### Management board / Box office
+
+There is a management board included. Place the according frontend module on a protected page in the frontend.
+The management board helps you to track the sales, checkins live, track box office sales, revert checkins.
 
 ### After the event
 
