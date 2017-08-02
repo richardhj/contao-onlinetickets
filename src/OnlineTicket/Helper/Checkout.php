@@ -8,8 +8,14 @@ use OnlineTicket\Model\Ticket;
 use Isotope\Model\ProductCollection\Order;
 
 
+/**
+ * Class Checkout
+ *
+ * @package OnlineTicket\Helper
+ */
 class Checkout
 {
+
     /**
      * Set tickets in database
      *

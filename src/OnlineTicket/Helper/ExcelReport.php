@@ -12,8 +12,15 @@ namespace OnlineTicket\Helper;
 use Haste\IO\Reader\ArrayReader;
 use Haste\IO\Writer\ExcelFileWriter;
 
+
+/**
+ * Class ExcelReport
+ *
+ * @package OnlineTicket\Helper
+ */
 class ExcelReport extends ExcelFileWriter
 {
+
     protected $arrTmpCurrentRows;
 
     /**

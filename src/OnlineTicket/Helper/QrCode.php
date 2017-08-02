@@ -6,8 +6,14 @@ use Contao\File;
 use Contao\Request;
 
 
+/**
+ * Class QrCode
+ *
+ * @package OnlineTicket\Helper
+ */
 class QrCode
 {
+
     /**
      * The api url
      */

@@ -7,6 +7,11 @@ use Haste\Http\Response\JsonResponse;
 use OnlineTicket\Api\AbstractApi;
 
 
+/**
+ * Class UserLogin
+ *
+ * @package OnlineTicket\Api\Action
+ */
 class UserLogin extends AbstractApi
 {
 

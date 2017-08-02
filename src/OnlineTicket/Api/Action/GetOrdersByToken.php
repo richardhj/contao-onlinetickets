@@ -9,6 +9,11 @@ use OnlineTicket\Model\Order;
 use OnlineTicket\Model\Ticket;
 
 
+/**
+ * Class GetOrdersByToken
+ *
+ * @package OnlineTicket\Api\Action
+ */
 class GetOrdersByToken extends AbstractApi
 {
 

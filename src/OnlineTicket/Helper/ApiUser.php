@@ -3,6 +3,11 @@
 namespace OnlineTicket\Helper;
 
 
+/**
+ * Class ApiUser
+ *
+ * @package OnlineTicket\Helper
+ */
 class ApiUser extends \User
 {
 

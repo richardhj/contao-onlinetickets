@@ -13,6 +13,11 @@ use OnlineTicket\Model\Event;
 use OnlineTicket\Model\Ticket;
 
 
+/**
+ * Class Dca
+ *
+ * @package OnlineTicket\Helper
+ */
 class Dca extends Backend
 {
 

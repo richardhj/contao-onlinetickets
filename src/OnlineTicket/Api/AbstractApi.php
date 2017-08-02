@@ -29,7 +29,7 @@ abstract class AbstractApi extends Controller
      *
      * @var array
      */
-    public static $allowedParams = ['token', 'timestamp', 'ticketcode', 'username', 'password', 'vendorid'];
+    public static $allowedParameters = ['token', 'timestamp', 'ticketcode', 'username', 'password', 'vendorid'];
 
 
     /**

@@ -8,6 +8,11 @@ use OnlineTicket\Model\Ticket;
 use Haste\Http\Response\JsonResponse;
 
 
+/**
+ * Class GetEventsByToken
+ *
+ * @package OnlineTicket\Api\Action
+ */
 class GetEventsByToken extends AbstractApi
 {
 

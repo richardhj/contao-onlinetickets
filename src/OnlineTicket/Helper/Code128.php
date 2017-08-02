@@ -2,8 +2,15 @@
 
 namespace OnlineTicket\Helper;
 
+
+/**
+ * Class Code128
+ *
+ * @package OnlineTicket\Helper
+ */
 class Code128
 {
+
     /**
      * The barcode data
      *

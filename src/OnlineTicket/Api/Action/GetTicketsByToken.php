@@ -8,6 +8,11 @@ use OnlineTicket\Api\AbstractApi;
 use OnlineTicket\Model\Ticket;
 
 
+/**
+ * Class GetTicketsByToken
+ *
+ * @package OnlineTicket\Api\Action
+ */
 class GetTicketsByToken extends AbstractApi
 {
 

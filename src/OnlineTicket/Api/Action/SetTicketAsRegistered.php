@@ -7,6 +7,11 @@ use OnlineTicket\Api\AbstractApi;
 use OnlineTicket\Model\Ticket;
 
 
+/**
+ * Class SetTicketAsRegistered
+ *
+ * @package OnlineTicket\Api\Action
+ */
 class SetTicketAsRegistered extends AbstractApi
 {
 

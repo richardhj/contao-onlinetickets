@@ -14,6 +14,11 @@ use OnlineTicket\Model\Event;
 use OnlineTicket\Model\Ticket;
 
 
+/**
+ * Class DataHandling
+ *
+ * @package OnlineTicket\Helper
+ */
 class DataHandling
 {
 

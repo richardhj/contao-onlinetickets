@@ -21,7 +21,7 @@ class Entrypoint extends Frontend
      *
      * @var array
      */
-    protected $params;
+    protected $parameters;
 
 
     /**
@@ -38,8 +38,8 @@ class Entrypoint extends Frontend
 
         $this->setAction((string) strtok(basename(\Environment::get('requestUri')), '?'));
 
-        foreach (AbstractApi::$allowedParams as $param) {
-            $this->setParam($param, \Input::get($param));
+        foreach (AbstractApi::$allowedParameters as $param) {
+            $this->addParameter($param, \Input::get($param));
         }
     }
 
@@ -72,10 +72,10 @@ class Entrypoint extends Frontend
      * @param string $key
      * @param mixed  $value
      */
-    public function setParam($key, $value)
+    public function addParameter($key, $value)
     {
         if (!is_null($value)) {
-            $this->params[$key] = $value;
+            $this->parameters[$key] = $value;
         }
     }
 
@@ -94,8 +94,7 @@ class Entrypoint extends Frontend
             if (class_exists($class)) {
                 /** @type AbstractApi $action */
                 $action = new $class();
-                $action->setParameters($this->params);
-
+                $action->setParameters($this->parameters);
                 $action->run();
             } else {
                 $response = new Response('Bad Request', 400);
