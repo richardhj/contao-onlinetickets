@@ -70,13 +70,13 @@ abstract class AbstractApi extends Controller
      *
      * @return mixed
      */
-    protected function get($key)
+    protected function getParameter($key)
     {
         if (isset($this->params[$key])) {
             return $this->params[$key];
         }
 
-        throw new \RuntimeException(sprintf('Invalid key %s', $key));
+        return null;
     }
 
 
@@ -85,7 +85,7 @@ abstract class AbstractApi extends Controller
      */
     protected function authenticateToken()
     {
-        if (!$this->user->setHash($this->get('token'))->authenticate()) {
+        if (!$this->user->setHash($this->getParameter('token'))->authenticate()) {
             $this->exitWithError($GLOBALS['TL_LANG']['ERR']['onlinetickets_authentication_error']);
         }
     }

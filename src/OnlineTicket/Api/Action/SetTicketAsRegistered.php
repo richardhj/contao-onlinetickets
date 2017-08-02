@@ -18,7 +18,7 @@ class SetTicketAsRegistered extends AbstractApi
         // Authenticate token
         $this->authenticateToken();
 
-        $ticket = Ticket::findByTicketCode($this->get('ticketcode'));
+        $ticket = Ticket::findByTicketCode($this->getParameter('ticketcode'));
 
         // Exit if ticket not found
         if (null === $ticket) {

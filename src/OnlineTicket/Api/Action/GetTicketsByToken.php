@@ -25,10 +25,10 @@ class GetTicketsByToken extends AbstractApi
         if (null !== $tickets) {
             while ($tickets->next()) {
                 // Do not include if ticket is older than submitted timestamp
-                if ($this->get('timestamp') > 1
-                    && ($tickets->tstamp < $this->get('timestamp')
+                if ($this->getParameter('timestamp') > 1
+                    && ($tickets->tstamp < $this->getParameter('timestamp')
                         || ($tickets->checkin
-                            && $tickets->checkin < $this->get('timestamp')))
+                            && $tickets->checkin < $this->getParameter('timestamp')))
                 ) {
                     continue;
                 }

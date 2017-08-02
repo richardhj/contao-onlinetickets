@@ -16,8 +16,8 @@ class UserLogin extends AbstractApi
     public function run()
     {
         // System login demands post variables
-        Input::setPost('username', $this->get('username'));
-        Input::setPost('password', $this->get('password'));
+        Input::setPost('username', $this->getParameter('username'));
+        Input::setPost('password', $this->getParameter('password'));
 
         // Login user or exit
         if (false === ($hash = $this->user->login())) {

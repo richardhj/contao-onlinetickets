@@ -27,7 +27,7 @@ class GetOrdersByToken extends AbstractApi
         if (null !== $orders) {
             while ($orders->next()) {
                 // Do not include if order is older than submitted timestamp
-                if ($this->get('timestamp') > 1 && $orders->tstamp < $this->get('timestamp')) {
+                if ($this->getParameter('timestamp') > 1 && $orders->tstamp < $this->getParameter('timestamp')) {
                     continue;
                 }
 
@@ -67,7 +67,7 @@ class GetOrdersByToken extends AbstractApi
         if (null !== $agencies) {
             while ($agencies->next()) {
                 // Do not include if agency is older than submitted timestamp
-                if ($this->get('timestamp') > 1 && $agencies->tstamp < $this->get('timestamp')) {
+                if ($this->getParameter('timestamp') > 1 && $agencies->tstamp < $this->getParameter('timestamp')) {
                     continue;
                 }
 
