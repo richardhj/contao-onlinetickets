@@ -128,3 +128,8 @@ To export the online tickets within an isotope document (e.g. the invoice), simp
 
 You need to point the url `https://api.ticketpay.de/` to your contao installation or you need to enter the IPv4 address pointing to your contao installtion.
 Then you can log in with your contao credentials. The events, orders and tickets will get fetched and you are ready to perform the checkin.
+
+To check the entrypoint is configured properly, you can request `https://api.ticketpay.de/api/UserLogin?username=test&password=test` or `192.168.0.…/api/UserLogin?username=test&password=test` (one of the endpoints should work) and should get the message:
+```json
+{"Errorcode":1,"Errormessage":"Zugangsdaten nicht richtig"}
+```
