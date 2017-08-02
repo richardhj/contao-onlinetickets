@@ -171,8 +171,7 @@ class DataHandling
                     case 'C128':
                     case 'C39':
                         $pdf->write1DBarcode(
-                            sprintf
-                            (
+                            sprintf(
                                 '%u.%u',
                                 $tickets->event_id,
                                 $tickets->id
