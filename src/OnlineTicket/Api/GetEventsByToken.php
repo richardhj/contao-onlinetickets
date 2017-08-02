@@ -2,7 +2,6 @@
 
 namespace OnlineTicket\Api;
 
-use OnlineTicket\AbstractApi;
 use OnlineTicket\Model\Event;
 use OnlineTicket\Model\Ticket;
 use Haste\Http\Response\JsonResponse;

@@ -4,7 +4,6 @@ namespace OnlineTicket\Api;
 
 use Contao\Input;
 use Haste\Http\Response\JsonResponse;
-use OnlineTicket\AbstractApi;
 
 
 class UserLogin extends AbstractApi

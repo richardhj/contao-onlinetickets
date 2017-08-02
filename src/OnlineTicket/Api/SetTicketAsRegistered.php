@@ -3,7 +3,6 @@
 namespace OnlineTicket\Api;
 
 use Haste\Http\Response\JsonResponse;
-use OnlineTicket\AbstractApi;
 use OnlineTicket\Model\Ticket;
 
 

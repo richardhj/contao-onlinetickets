@@ -4,7 +4,6 @@ namespace OnlineTicket\Api;
 
 use Contao\Date;
 use Haste\Http\Response\JsonResponse;
-use OnlineTicket\AbstractApi;
 use OnlineTicket\Model\Ticket;
 
 

@@ -2,11 +2,12 @@
 
 namespace OnlineTicket\Api;
 
+use Contao\Frontend;
 use Haste\Http\Response\Response;
 use OnlineTicket\AbstractApi;
 
 
-class Listener extends \Frontend
+class Entrypoint extends Frontend
 {
     /**
      * The api action to call

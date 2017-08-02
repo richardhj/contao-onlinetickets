@@ -1,6 +1,6 @@
 <?php
 
-namespace OnlineTicket;
+namespace OnlineTicket\Api;
 
 use Contao\Controller;
 use Haste\Http\Response\JsonResponse;

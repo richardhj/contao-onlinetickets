@@ -23,7 +23,7 @@ class ExcelReport extends ExcelFileWriter
     {
         parent::__construct($file, $extension);
 
-        if (parent::prepare(new ArrayReader())) {
+        if (parent::prepare(new ArrayReader([]))) {
             // Set default font size to 12
             $this->objPHPExcel->getDefaultStyle()->getFont()->setSize(12);
         }
