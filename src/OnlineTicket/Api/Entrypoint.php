@@ -4,7 +4,6 @@ namespace OnlineTicket\Api;
 
 use Contao\Frontend;
 use Haste\Http\Response\Response;
-use OnlineTicket\AbstractApi;
 
 
 class Entrypoint extends Frontend
