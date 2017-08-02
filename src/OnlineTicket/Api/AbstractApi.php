@@ -33,23 +33,33 @@ abstract class AbstractApi extends Controller
 
 
     /**
-     * Process parameters
-     *
-     * @param array $params
+     * AbstractApi constructor.
      */
-    public function __construct($params)
+    public function __construct()
     {
         parent::__construct();
 
         $this->loadLanguageFile('default');
-
         $this->user = ApiUser::getInstance();
+    }
 
+    /**
+     * @param array $params
+     *
+     * @return AbstractApi
+     */
+    public function setParams($params)
+    {
         $this->params = $params;
+        return $this;
+    }
 
-        if (empty($this->params)) {
-            throw new \InvalidArgumentException('Arguments are missing.');
-        }
+    /**
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
     }
 
 
