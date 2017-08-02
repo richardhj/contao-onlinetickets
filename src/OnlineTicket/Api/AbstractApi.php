@@ -15,7 +15,7 @@ abstract class AbstractApi extends Controller
      *
      * @var array
      */
-    protected $params;
+    protected $parameters;
 
 
     /**
@@ -44,22 +44,22 @@ abstract class AbstractApi extends Controller
     }
 
     /**
-     * @param array $params
+     * @param array $parameters
      *
      * @return AbstractApi
      */
-    public function setParams($params)
+    public function setParameters($parameters)
     {
-        $this->params = $params;
+        $this->parameters = $parameters;
         return $this;
     }
 
     /**
      * @return array
      */
-    public function getParams()
+    public function getParameters()
     {
-        return $this->params;
+        return $this->parameters;
     }
 
 
@@ -72,8 +72,8 @@ abstract class AbstractApi extends Controller
      */
     protected function getParameter($key)
     {
-        if (isset($this->params[$key])) {
-            return $this->params[$key];
+        if (isset($this->parameters[$key])) {
+            return $this->parameters[$key];
         }
 
         return null;

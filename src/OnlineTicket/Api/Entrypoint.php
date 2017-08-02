@@ -94,7 +94,7 @@ class Entrypoint extends Frontend
             if (class_exists($class)) {
                 /** @type AbstractApi $action */
                 $action = new $class();
-                $action->setParams($this->params);
+                $action->setParameters($this->params);
 
                 $action->run();
             } else {
