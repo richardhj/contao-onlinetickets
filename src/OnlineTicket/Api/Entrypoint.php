@@ -89,7 +89,7 @@ class Entrypoint extends Frontend
         $this->logRequest();
 
         try {
-            $class = '\OnlineTicket\Api\\' . ucfirst($this->getAction());
+            $class = '\OnlineTicket\Api\Action\\' . ucfirst($this->getAction());
 
             if (class_exists($class)) {
                 /** @type AbstractApi $action */

@@ -1,9 +1,10 @@
 <?php
 
-namespace OnlineTicket\Api;
+namespace OnlineTicket\Api\Action;
 
 use Contao\Date;
 use Haste\Http\Response\JsonResponse;
+use OnlineTicket\Api\AbstractApi;
 use OnlineTicket\Model\Ticket;
 
 

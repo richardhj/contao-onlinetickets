@@ -1,7 +1,8 @@
 <?php
 
-namespace OnlineTicket\Api;
+namespace OnlineTicket\Api\Action;
 
+use OnlineTicket\Api\AbstractApi;
 use OnlineTicket\Model\Event;
 use OnlineTicket\Model\Ticket;
 use Haste\Http\Response\JsonResponse;

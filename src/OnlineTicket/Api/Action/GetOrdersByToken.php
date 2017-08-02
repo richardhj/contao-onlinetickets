@@ -1,8 +1,9 @@
 <?php
 
-namespace OnlineTicket\Api;
+namespace OnlineTicket\Api\Action;
 
 use Haste\Http\Response\JsonResponse;
+use OnlineTicket\Api\AbstractApi;
 use OnlineTicket\Model\Agency;
 use OnlineTicket\Model\Order;
 use OnlineTicket\Model\Ticket;
