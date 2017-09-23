@@ -1,17 +1,17 @@
 <?php
 
-namespace OnlineTicket\Api\Action;
+namespace Richardhj\Isotope\OnlineTickets\Api\Action;
 
-use OnlineTicket\Api\AbstractApi;
-use OnlineTicket\Model\Event;
-use OnlineTicket\Model\Ticket;
+use Richardhj\Isotope\OnlineTickets\Api\AbstractApi;
+use Richardhj\Isotope\OnlineTickets\Model\Event;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
 use Haste\Http\Response\JsonResponse;
 
 
 /**
  * Class GetEventsByToken
  *
- * @package OnlineTicket\Api\Action
+ * @package Richardhj\Isotope\OnlineTickets\Api\Action
  */
 class GetEventsByToken extends AbstractApi
 {

@@ -31,7 +31,7 @@ $GLOBALS['TL_DCA']['tl_onlinetickets_tickets'] = [
             'relation' => [
                 'type'  => 'belongsTo',
                 'load'  => 'lazy',
-                'table' => \OnlineTicket\Model\Event::getTable()
+                'table' => \Richardhj\Isotope\OnlineTickets\Model\Event::getTable()
             ],
         ],
         'product_id'   => [
@@ -67,7 +67,7 @@ $GLOBALS['TL_DCA']['tl_onlinetickets_tickets'] = [
             'relation' => [
                 'type'  => 'belongsTo',
                 'load'  => 'lazy',
-                'table' => \OnlineTicket\Model\Agency::getTable()
+                'table' => \Richardhj\Isotope\OnlineTickets\Model\Agency::getTable()
             ],
         ],
         'hash'         => [
@@ -84,7 +84,7 @@ $GLOBALS['TL_DCA']['tl_onlinetickets_tickets'] = [
             'relation' => [
                 'type'  => 'belongsTo',
                 'load'  => 'lazy',
-                'table' => \UserModel::getTable()
+                'table' => \Contao\UserModel::getTable()
             ],
         ],
     ]

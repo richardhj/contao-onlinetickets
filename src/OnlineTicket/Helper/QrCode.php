@@ -1,6 +1,6 @@
 <?php
 
-namespace OnlineTicket\Helper;
+namespace Richardhj\Isotope\OnlineTickets\Helper;
 
 use Contao\File;
 use Contao\Request;
@@ -9,7 +9,7 @@ use Contao\Request;
 /**
  * Class QrCode
  *
- * @package OnlineTicket\Helper
+ * @package Richardhj\Isotope\OnlineTickets\Helper
  */
 class QrCode
 {

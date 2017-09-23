@@ -1,13 +1,17 @@
 <?php
 
-namespace OnlineTicket\Api;
+namespace Richardhj\Isotope\OnlineTickets\Api;
 
+use Contao\Environment;
 use Contao\Frontend;
+use Contao\Input;
+use Contao\PageModel;
 use Haste\Http\Response\Response;
 
 
 class Entrypoint extends Frontend
 {
+
     /**
      * The api action to call
      *
@@ -31,15 +35,15 @@ class Entrypoint extends Frontend
     {
         parent::__construct();
 
-        if (null !== ($page = \PageModel::findPublishedFallbackByHostname(\Environment::get('httpHost')))) {
+        if (null !== ($page = PageModel::findPublishedFallbackByHostname(Environment::get('httpHost')))) {
             // Set language
             $GLOBALS['TL_LANGUAGE'] = $page->language;
         }
 
-        $this->setAction((string) strtok(basename(\Environment::get('requestUri')), '?'));
+        $this->setAction((string) strtok(basename(Environment::get('requestUri')), '?'));
 
         foreach (AbstractApi::$allowedParameters as $param) {
-            $this->addParameter($param, \Input::get($param));
+            $this->addParameter($param, Input::get($param));
         }
     }
 
@@ -89,7 +93,7 @@ class Entrypoint extends Frontend
         $this->logRequest();
 
         try {
-            $class = '\OnlineTicket\Api\Action\\' . ucfirst($this->getAction());
+            $class = '\Richardhj\Isotope\OnlineTickets\Api\Action\\' . ucfirst($this->getAction());
 
             if (class_exists($class)) {
                 /** @type AbstractApi $action */
@@ -123,7 +127,7 @@ class Entrypoint extends Frontend
         log_message(
             sprintf(
                 "New request to %s.\n\nHeaders: %s\n\n\$_GET: %s\n\nBody:\n%s\n",
-                \Environment::get('base') . \Environment::get('request'),
+                Environment::get('base') . Environment::get('request'),
                 var_export($headers, true),
                 var_export($_GET, true),
                 file_get_contents("php://input")

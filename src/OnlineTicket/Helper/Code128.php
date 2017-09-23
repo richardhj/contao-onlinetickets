@@ -1,12 +1,12 @@
 <?php
 
-namespace OnlineTicket\Helper;
+namespace Richardhj\Isotope\OnlineTickets\Helper;
 
 
 /**
  * Class Code128
  *
- * @package OnlineTicket\Helper
+ * @package Richardhj\Isotope\OnlineTickets\Helper
  */
 class Code128
 {

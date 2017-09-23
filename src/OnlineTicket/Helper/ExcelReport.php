@@ -7,7 +7,7 @@
  * @author  Richard Henkenjohann <richard-ferienpass@henkenjohann.me>
  */
 
-namespace OnlineTicket\Helper;
+namespace Richardhj\Isotope\OnlineTickets\Helper;
 
 use Haste\IO\Reader\ArrayReader;
 use Haste\IO\Writer\ExcelFileWriter;
@@ -16,7 +16,7 @@ use Haste\IO\Writer\ExcelFileWriter;
 /**
  * Class ExcelReport
  *
- * @package OnlineTicket\Helper
+ * @package Richardhj\Isotope\OnlineTickets\Helper
  */
 class ExcelReport extends ExcelFileWriter
 {

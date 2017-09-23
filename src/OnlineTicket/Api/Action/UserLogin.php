@@ -1,16 +1,16 @@
 <?php
 
-namespace OnlineTicket\Api\Action;
+namespace Richardhj\Isotope\OnlineTickets\Api\Action;
 
 use Contao\Input;
 use Haste\Http\Response\JsonResponse;
-use OnlineTicket\Api\AbstractApi;
+use Richardhj\Isotope\OnlineTickets\Api\AbstractApi;
 
 
 /**
  * Class UserLogin
  *
- * @package OnlineTicket\Api\Action
+ * @package Richardhj\Isotope\OnlineTickets\Api\Action
  */
 class UserLogin extends AbstractApi
 {

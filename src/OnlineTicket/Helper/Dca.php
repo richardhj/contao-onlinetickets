@@ -1,6 +1,6 @@
 <?php
 
-namespace OnlineTicket\Helper;
+namespace Richardhj\Isotope\OnlineTickets\Helper;
 
 use Contao\Backend;
 use Contao\Image;
@@ -8,15 +8,15 @@ use Contao\Message;
 use Contao\System;
 use Contao\DataContainer;
 use Database\Result;
-use OnlineTicket\Model\Agency;
-use OnlineTicket\Model\Event;
-use OnlineTicket\Model\Ticket;
+use Richardhj\Isotope\OnlineTickets\Model\Agency;
+use Richardhj\Isotope\OnlineTickets\Model\Event;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
 
 
 /**
  * Class Dca
  *
- * @package OnlineTicket\Helper
+ * @package Richardhj\Isotope\OnlineTickets\Helper
  */
 class Dca extends Backend
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OnlineTicket\Helper;
+namespace Richardhj\Isotope\OnlineTickets\Helper;
 
 use Contao\DataContainer;
 use Contao\File;
@@ -9,15 +9,15 @@ use Haste\IO\Reader\ModelCollectionReader;
 use Haste\IO\Writer\CsvFileWriter;
 use Haste\IO\Writer\ExcelFileWriter;
 use Haste\Util\Format;
-use OnlineTicket\Model\Agency;
-use OnlineTicket\Model\Event;
-use OnlineTicket\Model\Ticket;
+use Richardhj\Isotope\OnlineTickets\Model\Agency;
+use Richardhj\Isotope\OnlineTickets\Model\Event;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
 
 
 /**
  * Class DataHandling
  *
- * @package OnlineTicket\Helper
+ * @package Richardhj\Isotope\OnlineTickets\Helper
  */
 class DataHandling
 {

@@ -1,17 +1,17 @@
 <?php
 
-namespace OnlineTicket\Helper;
+namespace Richardhj\Isotope\OnlineTickets\Helper;
 
 use Contao\System;
 use Isotope\Model\ProductCollectionItem;
-use OnlineTicket\Model\Ticket;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
 use Isotope\Model\ProductCollection\Order;
 
 
 /**
  * Class Checkout
  *
- * @package OnlineTicket\Helper
+ * @package Richardhj\Isotope\OnlineTickets\Helper
  */
 class Checkout
 {

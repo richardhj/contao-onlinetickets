@@ -1,6 +1,6 @@
 <?php
 
-namespace OnlineTicket\Module;
+namespace Richardhj\Isotope\OnlineTickets\Module;
 
 use Contao\Database;
 use Contao\Environment;
@@ -12,16 +12,16 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Haste\Form\Form;
 use Haste\Frontend\AbstractFrontendModule;
-use OnlineTicket\Model\Agency;
-use OnlineTicket\Model\Event;
-use OnlineTicket\Model\Ticket;
+use Richardhj\Isotope\OnlineTickets\Model\Agency;
+use Richardhj\Isotope\OnlineTickets\Model\Event;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
 /**
  * Class BoxOffice
  *
- * @package OnlineTicket\Module
+ * @package Richardhj\Isotope\OnlineTickets\Module
  */
 class BoxOffice extends AbstractFrontendModule
 {

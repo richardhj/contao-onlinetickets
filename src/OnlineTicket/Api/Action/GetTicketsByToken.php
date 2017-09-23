@@ -1,17 +1,17 @@
 <?php
 
-namespace OnlineTicket\Api\Action;
+namespace Richardhj\Isotope\OnlineTickets\Api\Action;
 
 use Contao\Date;
 use Haste\Http\Response\JsonResponse;
-use OnlineTicket\Api\AbstractApi;
-use OnlineTicket\Model\Ticket;
+use Richardhj\Isotope\OnlineTickets\Api\AbstractApi;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
 
 
 /**
  * Class GetTicketsByToken
  *
- * @package OnlineTicket\Api\Action
+ * @package Richardhj\Isotope\OnlineTickets\Api\Action
  */
 class GetTicketsByToken extends AbstractApi
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace OnlineTicket\Api;
+namespace Richardhj\Isotope\OnlineTickets\Api;
 
 use Contao\Controller;
 use Haste\Http\Response\JsonResponse;
-use OnlineTicket\Helper\ApiUser;
+use Richardhj\Isotope\OnlineTickets\Helper\ApiUser;
 
 
 abstract class AbstractApi extends Controller

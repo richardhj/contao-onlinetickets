@@ -35,7 +35,7 @@ $GLOBALS['TL_DCA']['tl_onlinetickets_agencies'] = [
                 'name',
                 'attendee_name'
             ],
-            'child_record_callback' => ['OnlineTicket\Helper\Dca', 'listAgency'],
+            'child_record_callback' => ['Richardhj\Isotope\OnlineTickets\Helper\Dca', 'listAgency'],
             //'child_record_class'      => 'no_padding'
         ],
         'global_operations' => [
@@ -56,7 +56,7 @@ $GLOBALS['TL_DCA']['tl_onlinetickets_agencies'] = [
                 'label'           => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['delete'],
                 'href'            => 'act=delete',
                 'icon'            => 'delete.gif',
-                'button_callback' => ['OnlineTicket\Helper\Dca', 'buttonForAgencyDelete'],
+                'button_callback' => ['Richardhj\Isotope\OnlineTickets\Helper\Dca', 'buttonForAgencyDelete'],
                 'attributes'      => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
                                      . '\'))return false;Backend.getScrollOffset()"'
             ],
@@ -74,7 +74,7 @@ $GLOBALS['TL_DCA']['tl_onlinetickets_agencies'] = [
                 'label'           => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['export_pdf'],
                 'href'            => 'key=export_pdf',
                 'icon'            => 'theme_export.gif',
-                'button_callback' => ['OnlineTicket\Helper\Dca', 'buttonForExportPreprintedTicketsPdf'],
+                'button_callback' => ['Richardhj\Isotope\OnlineTickets\Helper\Dca', 'buttonForExportPreprintedTicketsPdf'],
             ]
         ]
     ],
@@ -131,10 +131,10 @@ $GLOBALS['TL_DCA']['tl_onlinetickets_agencies'] = [
                 'maxlength'      => 5
             ],
             'load_callback' => [
-                ['OnlineTicket\Helper\Dca', 'loadAgencyTickets']
+                ['Richardhj\Isotope\OnlineTickets\Helper\Dca', 'loadAgencyTickets']
             ],
             'save_callback' => [
-                ['OnlineTicket\Helper\Dca', 'saveAgencyTickets']
+                ['Richardhj\Isotope\OnlineTickets\Helper\Dca', 'saveAgencyTickets']
             ],
         ],
         'count_tickets_recalled' => [
@@ -146,7 +146,7 @@ $GLOBALS['TL_DCA']['tl_onlinetickets_agencies'] = [
                 'maxlength' => 5
             ],
             'save_callback' => [
-                ['OnlineTicket\Helper\Dca', 'saveAgencyTicketsRecalled']
+                ['Richardhj\Isotope\OnlineTickets\Helper\Dca', 'saveAgencyTicketsRecalled']
             ],
             'sql'           => "int(5) NOT NULL default '0'"
         ],

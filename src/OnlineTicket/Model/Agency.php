@@ -1,7 +1,7 @@
 <?php
 
 
-namespace OnlineTicket\Model;
+namespace Richardhj\Isotope\OnlineTickets\Model;
 
 use Contao\Model;
 

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace OnlineTicket\Model;
+namespace Richardhj\Isotope\OnlineTickets\Model;
 
 use Haste\Model\Model as HasteModel;
 use Contao\Model\Collection;

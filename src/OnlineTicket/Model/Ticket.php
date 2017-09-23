@@ -1,7 +1,8 @@
 <?php
 
-namespace OnlineTicket\Model;
+namespace Richardhj\Isotope\OnlineTickets\Model;
 
+use Contao\Database;
 use Contao\Model;
 use Isotope\Model\Address;
 
@@ -39,7 +40,6 @@ class Ticket extends Model
     public static function findByUser($memberId, array $options = [])
     {
         $events = Event::findByUser($memberId);
-
         if (null === $events) {
             return null;
         }
@@ -90,7 +90,7 @@ class Ticket extends Model
             $value,
             array_merge(
                 [
-                    'order' => 'tstamp,id,' . \Database::getInstance()->findInSet("$t.event_id", $events)
+                    'order' => 'tstamp,id,' . Database::getInstance()->findInSet("$t.event_id", $events)
                 ],
                 $options
             )

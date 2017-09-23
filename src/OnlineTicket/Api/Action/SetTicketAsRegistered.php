@@ -1,16 +1,16 @@
 <?php
 
-namespace OnlineTicket\Api\Action;
+namespace Richardhj\Isotope\OnlineTickets\Api\Action;
 
 use Haste\Http\Response\JsonResponse;
-use OnlineTicket\Api\AbstractApi;
-use OnlineTicket\Model\Ticket;
+use Richardhj\Isotope\OnlineTickets\Api\AbstractApi;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
 
 
 /**
  * Class SetTicketAsRegistered
  *
- * @package OnlineTicket\Api\Action
+ * @package Richardhj\Isotope\OnlineTickets\Api\Action
  */
 class SetTicketAsRegistered extends AbstractApi
 {
