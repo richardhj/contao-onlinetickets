@@ -33,7 +33,6 @@
     "contao": {
       "sources": {
         "entrypoint-api": "api",
-        "assets": "assets/tickets",
         "module": "system/modules/onlinetickets"
       }
     }
