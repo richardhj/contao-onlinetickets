@@ -1,36 +1,37 @@
 <?php
 
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
+
+
 namespace Richardhj\Isotope\OnlineTickets\Api;
 
 use Contao\Controller;
-use Haste\Http\Response\JsonResponse;
+use Contao\Input;
 use Richardhj\Isotope\OnlineTickets\Helper\ApiUser;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
+/**
+ * Class AbstractApi
+ *
+ * @package Richardhj\Isotope\OnlineTickets\Api
+ */
 abstract class AbstractApi extends Controller
 {
-
-    /**
-     * The submitted parameters
-     *
-     * @var array
-     */
-    protected $parameters;
-
 
     /**
      * @var ApiUser
      */
     protected $user;
-
-
-    /**
-     * The allowed parameters
-     *
-     * @var array
-     */
-    public static $allowedParameters = ['token', 'timestamp', 'ticketcode', 'username', 'password', 'vendorid'];
-
 
     /**
      * AbstractApi constructor.
@@ -44,26 +45,6 @@ abstract class AbstractApi extends Controller
     }
 
     /**
-     * @param array $parameters
-     *
-     * @return AbstractApi
-     */
-    public function setParameters($parameters)
-    {
-        $this->parameters = $parameters;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getParameters()
-    {
-        return $this->parameters;
-    }
-
-
-    /**
      * Get a submitted parameter
      *
      * @param string $key
@@ -72,13 +53,8 @@ abstract class AbstractApi extends Controller
      */
     protected function getParameter($key)
     {
-        if (isset($this->parameters[$key])) {
-            return $this->parameters[$key];
-        }
-
-        return null;
+        return Input::get($key);
     }
-
 
     /**
      * Authenticate the submitted token or exit otherwise
@@ -89,7 +65,6 @@ abstract class AbstractApi extends Controller
             $this->exitWithError($GLOBALS['TL_LANG']['ERR']['onlinetickets_authentication_error']);
         }
     }
-
 
     /**
      * Exit with json formatted error message

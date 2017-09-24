@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
+
+
 namespace Richardhj\Isotope\OnlineTickets\Helper;
 
 use Contao\Config;
@@ -11,7 +23,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 
 /**
- * Class ApiUser
+ * Class ApiUser.
+ * This model does not set a cookie for authentication. Rather the authentication works by passing the token (= strHash)
  *
  * @package Richardhj\Isotope\OnlineTickets\Helper
  */
@@ -92,7 +105,7 @@ class ApiUser extends User
         $time = time();
 
         // Validate the session
-        if ((!Config::get('disableIpCheck') && $session->ip != $this->strIp)
+        if ((!Config::get('disableIpCheck') && $session->ip !== $this->strIp)
             || $session->hash !== $this->strHash
             || ($session->tstamp + Config::get('sessionTimeout')) < $time
         ) {

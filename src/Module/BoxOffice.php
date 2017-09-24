@@ -1,10 +1,21 @@
 <?php
 
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
+
+
 namespace Richardhj\Isotope\OnlineTickets\Module;
 
 use Contao\Database;
 use Contao\Environment;
-use Contao\Model\Collection;
 use Contao\PageError403;
 use Contao\UserModel;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
@@ -57,7 +68,6 @@ class BoxOffice extends AbstractFrontendModule
 //        /** @var Model $event */
         $event = Event::findByPk($eventId);
         if (null === $event) {
-            /** @var Collection|Event $events */
             $events = Event::findByUser($user->id);
             if (null === $events) {
                 $this->Template->noEvents    = true;
@@ -119,7 +129,6 @@ class BoxOffice extends AbstractFrontendModule
                 'inputType'        => 'select',
                 //                'default' => ;
                 'options_callback' => function () use ($event) {
-                    /** @var Collection|Agency $agencies */
                     $agencies = Agency::findBy(['pid=?', 'box_office_checkin=1'], $event->id);
                     if (null === $agencies) {
                         return [];
@@ -150,9 +159,7 @@ class BoxOffice extends AbstractFrontendModule
             }
         }
 
-        $table = [];
-
-        /** @var Collection|Ticket $lastCheckedIn */
+        $table         = [];
         $lastCheckedIn =
             Ticket::findBy(['event_id=?', 'checkin<>0'], [$event->id], ['limit' => 10, 'order' => 'checkin DESC']);
         if (null !== $lastCheckedIn) {

@@ -1,15 +1,31 @@
 <?php
 
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
+
+
 namespace Richardhj\Isotope\OnlineTickets\Api;
 
 use Contao\Environment;
 use Contao\Frontend;
-use Contao\Input;
 use Contao\PageModel;
-use Haste\Http\Response\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 
-class Entrypoint extends Frontend
+/**
+ * Class EntryPoint
+ *
+ * @package Richardhj\Isotope\OnlineTickets\Api
+ */
+class EntryPoint extends Frontend
 {
 
     /**
@@ -17,16 +33,7 @@ class Entrypoint extends Frontend
      *
      * @var string
      */
-    protected $action;
-
-
-    /**
-     * The submitted params
-     *
-     * @var array
-     */
-    protected $parameters;
-
+    private $action;
 
     /**
      * Construct the class
@@ -41,12 +48,7 @@ class Entrypoint extends Frontend
         }
 
         $this->setAction((string) strtok(basename(Environment::get('requestUri')), '?'));
-
-        foreach (AbstractApi::$allowedParameters as $param) {
-            $this->addParameter($param, Input::get($param));
-        }
     }
-
 
     /**
      * Set the action
@@ -58,7 +60,6 @@ class Entrypoint extends Frontend
         $this->action = $action;
     }
 
-
     /**
      * Get the action
      *
@@ -69,21 +70,6 @@ class Entrypoint extends Frontend
         return $this->action;
     }
 
-
-    /**
-     * Set a parameter
-     *
-     * @param string $key
-     * @param mixed  $value
-     */
-    public function addParameter($key, $value)
-    {
-        if (!is_null($value)) {
-            $this->parameters[$key] = $value;
-        }
-    }
-
-
     /**
      * Run the controller
      */
@@ -93,23 +79,24 @@ class Entrypoint extends Frontend
         $this->logRequest();
 
         try {
-            $class = '\Richardhj\Isotope\OnlineTickets\Api\Action\\' . ucfirst($this->getAction());
+            $class = __NAMESPACE__ . '\Action\\' . ucfirst($this->getAction());
 
             if (class_exists($class)) {
                 /** @type AbstractApi $action */
                 $action = new $class();
-                $action->setParameters($this->parameters);
                 $action->run();
             } else {
-                $response = new Response('Bad Request', 400);
+                $response = new Response('Bad Request', Response::HTTP_BAD_REQUEST);
                 $response->send();
             }
         } catch (\Exception $e) {
-            $response = new Response(sprintf('Internal Server Error. Message: %s', $e->getMessage()), 500);
+            $response = new Response(
+                sprintf('Internal Server Error. Message: %s', $e->getMessage()),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
             $response->send();
         }
     }
-
 
     /**
      * Log every api request to our log file

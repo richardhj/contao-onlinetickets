@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
+
+
 namespace Richardhj\Isotope\OnlineTickets\Model;
 
 use Contao\Database;
@@ -8,6 +20,9 @@ use Isotope\Model\Address;
 
 
 /**
+ * Class Ticket
+ *
+ * @package Richardhj\Isotope\OnlineTickets\Model
  * @property int    $tstamp       The timestamp activated
  * @property int    $event_id     The related event
  * @property int    $product_id   The related product
@@ -177,8 +192,6 @@ class Ticket extends Model
      */
     public function getAddress()
     {
-        /** @noinspection PhpUndefinedMethodInspection */
-        /** @noinspection PhpUndefinedClassInspection */
         return Address::findOneBy(
             ['pid=?', 'ptable=?'],
             [$this->order_id, 'tl_iso_product_collection']

@@ -14,5 +14,5 @@ require_once('../../../../../system/initialize.php');
 /**
  * Run the controller
  */
-$controller = new \Richardhj\Isotope\OnlineTickets\Api\Entrypoint();
+$controller = new \Richardhj\Isotope\OnlineTickets\Api\EntryPoint();
 $controller->run();

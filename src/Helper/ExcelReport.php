@@ -1,11 +1,16 @@
 <?php
+
 /**
- * FERIENPASS extension for Contao Open Source CMS built on the MetaModels extension
- * Copyright (c) 2015-2015 Richard Henkenjohann
+ * This file is part of richardhj/contao-onlinetickets.
  *
- * @package Ferienpass
- * @author  Richard Henkenjohann <richard-ferienpass@henkenjohann.me>
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
  */
+
 
 namespace Richardhj\Isotope\OnlineTickets\Helper;
 

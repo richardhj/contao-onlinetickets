@@ -1,12 +1,27 @@
 <?php
 
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
+
 
 namespace Richardhj\Isotope\OnlineTickets\Model;
 
+use Contao\Database;
 use Contao\Model;
 
 
 /**
+ * Class Agency
+ *
+ * @package Richardhj\Isotope\OnlineTickets\Model
  * @property int    $pid                    The event id
  * @property int    $tstamp                 The timestamp created
  * @property string $name                   The ticket agency name
@@ -47,8 +62,6 @@ class Agency extends Model
 
             // Get agency's ticket price but inherit event's ticket price
             case 'ticket_price':
-                /** @noinspection PhpUndefinedMethodInspection */
-
                 return (strlen(parent::__get($key)))
                     ? parent::__get($key)
                     : Event::findByPk($this->pid)->ticket_price;
@@ -86,13 +99,11 @@ class Agency extends Model
     public static function findByUser($memberId, array $options = [])
     {
         $events = Event::findByUser($memberId);
-
         if (null === $events) {
             return null;
         }
 
         $eventIds = $events->fetchEach('id');
-
         if (empty($eventIds)) {
             return null;
         }
@@ -106,7 +117,7 @@ class Agency extends Model
             null,
             array_merge(
                 [
-                    'order' => \Database::getInstance()->findInSet("$t.pid", $eventIds)
+                    'order' => Database::getInstance()->findInSet("$t.pid", $eventIds)
                 ],
                 $options
             )
