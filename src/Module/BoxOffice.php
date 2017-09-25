@@ -16,6 +16,7 @@ namespace Richardhj\Isotope\OnlineTickets\Module;
 
 use Contao\Database;
 use Contao\Environment;
+use Contao\Input;
 use Contao\PageError403;
 use Contao\UserModel;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
@@ -106,7 +107,7 @@ class BoxOffice extends AbstractFrontendModule
 
         $manualCheckInForm = new Form(
             'check_in', 'POST', function (Form $haste) {
-            return \Input::post('FORM_SUBMIT') === $haste->getFormId();
+            return Input::post('FORM_SUBMIT') === $haste->getFormId();
         }
         );
 
