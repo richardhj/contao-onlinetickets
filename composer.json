@@ -24,6 +24,9 @@
     "isotope/isotope-core": "^2.3",
     "symfony/http-foundation": "^2.7 || ^3.0"
   },
+  "suggest": {
+    "katgirl/isotope-documents": "Enhanced Isotope PDF templates to choose from"
+  },
   "autoload": {
     "psr-4": {
       "Richardhj\\Isotope\\OnlineTickets\\": "src/"
