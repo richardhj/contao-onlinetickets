@@ -18,6 +18,7 @@ use Contao\Config;
 use Contao\Environment;
 use Contao\User;
 use Contao\SessionModel;
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LogEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -93,12 +94,14 @@ class ApiUser extends User
         // Try to find the session in the database
         if (null === $session) {
             $this->getEventDispatcher()->dispatch(
+                ContaoEvents::SYSTEM_LOG,
                 new LogEvent(
                     'Could not find the session record',
                     __METHOD__,
                     TL_ACCESS
                 )
             );
+
             return false;
         }
 
@@ -110,12 +113,14 @@ class ApiUser extends User
             || ($session->tstamp + Config::get('sessionTimeout')) < $time
         ) {
             $this->getEventDispatcher()->dispatch(
+                ContaoEvents::SYSTEM_LOG,
                 new LogEvent(
                     'Could not verify the session',
                     __METHOD__,
                     TL_ACCESS
                 )
             );
+
             return false;
         }
 
@@ -124,12 +129,14 @@ class ApiUser extends User
         // Load the user object
         if (false === $this->findBy('id', $this->intId)) {
             $this->getEventDispatcher()->dispatch(
+                ContaoEvents::SYSTEM_LOG,
                 new LogEvent(
                     'Could not find the session user',
                     __METHOD__,
                     TL_ACCESS
                 )
             );
+
             return false;
         }
 
@@ -193,7 +200,7 @@ class ApiUser extends User
         $time = time();
 
         // Generate the cookie hash
-        $this->strHash = sha1(session_id() . (!Config::get('disableIpCheck') ? $this->strIp : '') . $this->strCookie);
+        $this->strHash = sha1(session_id().(!Config::get('disableIpCheck') ? $this->strIp : '').$this->strCookie);
 
         // Clean up old sessions
         $this->Database
