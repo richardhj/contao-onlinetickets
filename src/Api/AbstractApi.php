@@ -59,7 +59,8 @@ abstract class AbstractApi
      */
     protected function authenticateToken()
     {
-        if (!$this->user->setHash($this->getParameter('token'))->authenticate()) {
+        $userHash = $this->getParameter('token');
+        if (!$this->user->setHash($userHash)->authenticate()) {
             $this->exitWithError($GLOBALS['TL_LANG']['ERR']['onlinetickets_authentication_error']);
         }
     }
@@ -76,7 +77,7 @@ abstract class AbstractApi
                 'Errorcode'    => 1,
                 'Errormessage' => ('' !== $message)
                     ? $message
-                    : $GLOBALS['TL_LANG']['ERR']['onlinetickets_default']
+                    : $GLOBALS['TL_LANG']['ERR']['onlinetickets_default'],
             ]
         );
 
