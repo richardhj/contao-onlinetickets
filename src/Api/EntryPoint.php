@@ -15,7 +15,6 @@
 namespace Richardhj\Isotope\OnlineTickets\Api;
 
 use Contao\Environment;
-use Contao\Frontend;
 use Contao\PageModel;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,7 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @package Richardhj\Isotope\OnlineTickets\Api
  */
-class EntryPoint extends Frontend
+class EntryPoint
 {
 
     /**
@@ -40,8 +39,6 @@ class EntryPoint extends Frontend
      */
     public function __construct()
     {
-        parent::__construct();
-
         if (null !== ($page = PageModel::findPublishedFallbackByHostname(Environment::get('httpHost')))) {
             // Set language
             $GLOBALS['TL_LANGUAGE'] = $page->language;

@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  *
  * @package Richardhj\Isotope\OnlineTickets\Api
  */
-abstract class AbstractApi extends Controller
+abstract class AbstractApi
 {
 
     /**
@@ -38,9 +38,7 @@ abstract class AbstractApi extends Controller
      */
     public function __construct()
     {
-        parent::__construct();
-
-        $this->loadLanguageFile('default');
+        Controller::loadLanguageFile('default');
         $this->user = ApiUser::getInstance();
     }
 
