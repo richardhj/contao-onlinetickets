@@ -16,6 +16,8 @@ namespace Richardhj\Isotope\OnlineTickets\Api\Action;
 
 use Contao\Input;
 use Richardhj\Isotope\OnlineTickets\Api\AbstractApi;
+use Richardhj\Isotope\OnlineTickets\Api\ApiErrors;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
@@ -38,13 +40,17 @@ class UserLogin extends AbstractApi
 
         // Login user or exit
         if (false === ($hash = $this->user->login())) {
-            $this->exitWithError($GLOBALS['TL_LANG']['ERR']['onlinetickets_login_error']);
+            $this->exitWithError(ApiErrors::UNKNOWN_TERMINAL, $GLOBALS['TL_LANG']['ERR']['onlinetickets_login_error']);
+        }
+
+        if (null === Ticket::findByUser($this->user->id)) {
+            $this->exitWithError(ApiErrors::NO_EVENTS, 'Keine Veranstaltungen mit aktiven Ticktes gefunden');
         }
 
         // Return session hash as token
         $response = new JsonResponse(
             [
-                'Token' => $hash
+                'Token' => $hash,
             ]
         );
 

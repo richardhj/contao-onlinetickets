@@ -68,13 +68,14 @@ abstract class AbstractApi
     /**
      * Exit with json formatted error message
      *
+     * @param int    $code
      * @param string $message
      */
-    protected function exitWithError($message = '')
+    protected function exitWithError($code = 1, $message = '')
     {
         $response = new JsonResponse(
             [
-                'Errorcode'    => 1,
+                'Errorcode'    => $code,
                 'Errormessage' => ('' !== $message)
                     ? $message
                     : $GLOBALS['TL_LANG']['ERR']['onlinetickets_default'],
@@ -82,6 +83,7 @@ abstract class AbstractApi
         );
 
         $response->send();
+        exit;
     }
 
 

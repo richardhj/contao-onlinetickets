@@ -15,6 +15,7 @@
 namespace Richardhj\Isotope\OnlineTickets\Api\Action;
 
 use Richardhj\Isotope\OnlineTickets\Api\AbstractApi;
+use Richardhj\Isotope\OnlineTickets\Api\ApiErrors;
 use Richardhj\Isotope\OnlineTickets\Model\Ticket;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -75,13 +76,6 @@ class SetTicketAsRegistered extends AbstractApi
      */
     protected function exitTicketNotFound()
     {
-        $response = new JsonResponse(
-            [
-                'Errorcode'    => 4,
-                'Errormessage' => $GLOBALS['TL_LANG']['ERR']['onlinetickets_ticket_not_found'],
-            ]
-        );
-
-        $response->send();
+        $this->exitWithError(ApiErrors::TICKET_NOT_FOUND, $GLOBALS['TL_LANG']['ERR']['onlinetickets_ticket_not_found']);
     }
 }
