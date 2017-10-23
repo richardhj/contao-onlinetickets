@@ -52,7 +52,7 @@ class ApiUser extends User
      *
      * @var string
      */
-    protected $strCookie = 'API_USER_AUTH';
+    protected $strCookie = 'ONLINE_TICKETS_API_USER_AUTH';
 
 
     /**
