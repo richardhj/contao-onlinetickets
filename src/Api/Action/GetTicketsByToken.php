@@ -53,9 +53,9 @@ class GetTicketsByToken extends AbstractApi
                 $status  = (null === $order) ? null : $order->getRelated('order_status');
 
                 $ticket = [
-                    'TicketId'          => (int) $tickets->id,
-                    'EventId'           => (int) $tickets->event_id,
-                    'OrderId'           => (int) $tickets->order_id ?: -(int) $tickets->agency_id,
+                    'TicketId'          => (int)$tickets->id,
+                    'EventId'           => (int)$tickets->event_id,
+                    'OrderId'           => (int)$tickets->order_id ?: -(int)$tickets->agency_id,
                     'TicketCode'        => $tickets->hash,
                     'AttendeeName'      => (null !== $address) ? sprintf(
                         '%s %s',
@@ -67,9 +67,9 @@ class GetTicketsByToken extends AbstractApi
                     'CheckinPossible'   => $tickets->current()->checkInPossible(),
                     'TicketType'        => $tickets->getRelated('product_id')->name,
                     'TicketTags'        => '', // comma separated string
-                    'TicketCheckinTime' => $tickets->checkin ? Date::parse('d. F, H:i', $tickets->checkin) : '',
+                    'TicketCheckinTime' => $tickets->checkin ? Date::parse('Y-m-d H:i:s O', $tickets->checkin) : '',
                     'TicketInfo'        => $tickets->getRelated('order_id')->notes ?: '',
-                    'TicketBarcode'     => $tickets->event_id . '.' . $tickets->id
+                    'TicketBarcode'     => $tickets->event_id.'.'.$tickets->id,
                 ];
 
                 $return[] = $ticket;
@@ -78,7 +78,7 @@ class GetTicketsByToken extends AbstractApi
 
         $response = new JsonResponse(
             [
-                'Tickets' => $return
+                'Tickets' => $return,
             ]
         );
 
