@@ -210,7 +210,7 @@ class Agency extends Backend
     public function saveAgencyTicketsRecalled($value, $dc)
     {
         $value  = static::processSimpleCalculation($value, $dc->field);
-        $agency = Agency::findByPk($dc->activeRecord->id);
+        $agency = AgencyModel::findByPk($dc->activeRecord->id);
 
         if ($value > $agency->tickets_generated - $agency->tickets_checkedin) {
             throw new Exception(
