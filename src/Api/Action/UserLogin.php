@@ -40,11 +40,11 @@ class UserLogin extends AbstractApi
 
         // Login user or exit
         if (false === ($hash = $this->user->login())) {
-            $this->exitWithError(ApiErrors::UNKNOWN_TERMINAL, $GLOBALS['TL_LANG']['ERR']['onlinetickets_login_error']);
+            $this->exitWithError();
         }
 
         if (null === Ticket::findByUser($this->user->id)) {
-            $this->exitWithError(ApiErrors::NO_EVENTS, 'Keine Veranstaltungen mit aktiven Ticktes gefunden');
+            $this->exitWithError(ApiErrors::NO_EVENTS);
         }
 
         // Return session hash as token

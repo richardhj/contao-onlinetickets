@@ -76,6 +76,6 @@ class SetTicketAsRegistered extends AbstractApi
      */
     protected function exitTicketNotFound()
     {
-        $this->exitWithError(ApiErrors::TICKET_NOT_FOUND, $GLOBALS['TL_LANG']['ERR']['onlinetickets_ticket_not_found']);
+        $this->exitWithError(ApiErrors::TICKET_NOT_FOUND);
     }
 }

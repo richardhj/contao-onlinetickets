@@ -61,24 +61,25 @@ abstract class AbstractApi
     {
         $userHash = $this->getParameter('token');
         if (!$this->user->setHash($userHash)->authenticate()) {
-            $this->exitWithError($GLOBALS['TL_LANG']['ERR']['onlinetickets_authentication_error']);
+            $this->exitWithError();
         }
     }
 
     /**
      * Exit with json formatted error message
      *
-     * @param int    $code
-     * @param string $message
+     * @param int $code The error code as defined in @see ApiErrors
      */
-    protected function exitWithError($code = 1, $message = '')
+    protected function exitWithError($code = null)
     {
+        if (null === $code) {
+            $code = ApiErrors::UNKNOWN_TERMINAL;
+        }
+
         $response = new JsonResponse(
             [
                 'Errorcode'    => $code,
-                'Errormessage' => ('' !== $message)
-                    ? $message
-                    : $GLOBALS['TL_LANG']['ERR']['onlinetickets_default'],
+                'Errormessage' => $GLOBALS['TL_LANG']['ERR']['onlinetickets_api'][$code],
             ]
         );
 

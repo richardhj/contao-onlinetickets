@@ -16,6 +16,7 @@ namespace Richardhj\Isotope\OnlineTickets\Api;
 
 use Contao\Environment;
 use Contao\PageModel;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -86,7 +87,7 @@ class EntryPoint
                 $response = new Response('Bad Request', Response::HTTP_BAD_REQUEST);
                 $response->send();
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $response = new Response(
                 sprintf('Internal Server Error. Message: %s', $e->getMessage()),
                 Response::HTTP_INTERNAL_SERVER_ERROR

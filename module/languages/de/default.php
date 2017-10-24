@@ -11,15 +11,15 @@
  * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
  */
 
+use Richardhj\Isotope\OnlineTickets\Api\ApiErrors;
+
 
 /**
  * Errors
  */
-$GLOBALS['TL_LANG']['ERR']['onlinetickets_login_error']          = 'Zugangsdaten nicht richtig';
-$GLOBALS['TL_LANG']['ERR']['onlinetickets_authentication_error'] = 'Session konnte nicht wiederhergestellt werden';
-$GLOBALS['TL_LANG']['ERR']['onlinetickets_ticket_not_found']     = 'Ticket nicht gefunden';
-$GLOBALS['TL_LANG']['ERR']['onlinetickets_default']              = 'Unbekanntes Terminal';
-
+$GLOBALS['TL_LANG']['ERR']['onlinetickets_api'][ApiErrors::UNKNOWN_TERMINAL] = 'Unbekanntes Terminal';
+$GLOBALS['TL_LANG']['ERR']['onlinetickets_api'][ApiErrors::TICKET_NOT_FOUND] = 'Ticket nicht gefunden';
+$GLOBALS['TL_LANG']['ERR']['onlinetickets_api'][ApiErrors::NO_EVENTS]        = 'Keine Veranstaltungen mit aktiven Ticktes gefunden';
 
 /**
  * Miscellaneous
