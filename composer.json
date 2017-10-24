@@ -14,7 +14,7 @@
     "email": "richard@henkenjohann.me"
   },
   "require": {
-    "php": "^5.4 || ^7.0",
+    "php": "^5.5 || ^7.0",
     "cliffparnitzky/user-member-bridge": "^1.2",
     "contao-community-alliance/dependency-container": "^1.8",
     "contao-community-alliance/events-contao-bindings": "^3.5",

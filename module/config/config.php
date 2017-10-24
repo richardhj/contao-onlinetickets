@@ -11,6 +11,12 @@
  * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
  */
 
+use Richardhj\Isotope\OnlineTickets\Helper\Checkout;
+use Richardhj\Isotope\OnlineTickets\Helper\DataHandling;
+use Richardhj\Isotope\OnlineTickets\Model\Agency;
+use Richardhj\Isotope\OnlineTickets\Model\Event;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
+
 
 /**
  * Back end modules
@@ -18,9 +24,9 @@
 $GLOBALS['BE_MOD']['isotope']['onlinetickets_events'] = [
     'tables'     => ['tl_onlinetickets_events', 'tl_onlinetickets_agencies'],
     'icon'       => 'system/modules/calendar/assets/icon.gif',
-    'report'     => ['Richardhj\Isotope\OnlineTickets\Helper\DataHandling', 'exportEventReport'],
-    'export'     => ['Richardhj\Isotope\OnlineTickets\Helper\DataHandling', 'exportAgencyBarcodes'],
-    'export_pdf' => ['Richardhj\Isotope\OnlineTickets\Helper\DataHandling', 'exportPreprintedTicketsPdf']
+    'report'     => [DataHandling::class, 'exportEventReport'],
+    'export'     => [DataHandling::class, 'exportAgencyBarcodes'],
+    'export_pdf' => [DataHandling::class, 'exportPreprintedTicketsPdf'],
 ];
 
 
@@ -33,13 +39,13 @@ $GLOBALS['FE_MOD']['application']['boxoffice'] = 'Richardhj\Isotope\OnlineTicket
 /**
  * Models
  */
-$GLOBALS['TL_MODELS'][\Richardhj\Isotope\OnlineTickets\Model\Event::getTable()]  = 'Richardhj\Isotope\OnlineTickets\Model\Event';
-$GLOBALS['TL_MODELS'][\Richardhj\Isotope\OnlineTickets\Model\Ticket::getTable()] = 'Richardhj\Isotope\OnlineTickets\Model\Ticket';
-$GLOBALS['TL_MODELS'][\Richardhj\Isotope\OnlineTickets\Model\Agency::getTable()] = 'Richardhj\Isotope\OnlineTickets\Model\Agency';
+$GLOBALS['TL_MODELS'][Event::getTable()]  = Event::class;
+$GLOBALS['TL_MODELS'][Ticket::getTable()] = Ticket::class;
+$GLOBALS['TL_MODELS'][Agency::getTable()] = Agency::class;
 
 
 /**
  * Hooks
  */
-$GLOBALS['ISO_HOOKS']['preCheckout'][]  = ['Richardhj\Isotope\OnlineTickets\Helper\Checkout', 'setTicketsInDatabase'];
-$GLOBALS['ISO_HOOKS']['postCheckout'][] = ['Richardhj\Isotope\OnlineTickets\Helper\Checkout', 'activateTicketsInDatabase'];
+$GLOBALS['ISO_HOOKS']['preCheckout'][]  = [Checkout::class, 'setTicketsInDatabase'];
+$GLOBALS['ISO_HOOKS']['postCheckout'][] = [Checkout::class, 'activateTicketsInDatabase'];
