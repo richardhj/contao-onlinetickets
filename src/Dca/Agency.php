@@ -238,7 +238,7 @@ class Agency extends Backend
             throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['natural'], $field));
         }
 
-        eval("\$varValue = $value;");
+        eval("\$value = $value;");
 
         // Use the default validator for natural numbers
         if (!Validator::isNatural($value)) {
