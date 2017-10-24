@@ -16,13 +16,14 @@ use Richardhj\Isotope\OnlineTickets\Helper\DataHandling;
 use Richardhj\Isotope\OnlineTickets\Model\Agency;
 use Richardhj\Isotope\OnlineTickets\Model\Event;
 use Richardhj\Isotope\OnlineTickets\Model\Ticket;
+use Richardhj\Isotope\OnlineTickets\Module\BoxOffice;
 
 
 /**
  * Back end modules
  */
 $GLOBALS['BE_MOD']['isotope']['onlinetickets_events'] = [
-    'tables'     => ['tl_onlinetickets_events', 'tl_onlinetickets_agencies'],
+    'tables'     => [Event::getTable(), Agency::getTable()],
     'icon'       => 'system/modules/calendar/assets/icon.gif',
     'report'     => [DataHandling::class, 'exportEventReport'],
     'export'     => [DataHandling::class, 'exportAgencyBarcodes'],
@@ -33,7 +34,7 @@ $GLOBALS['BE_MOD']['isotope']['onlinetickets_events'] = [
 /**
  * Front end modules
  */
-$GLOBALS['FE_MOD']['application']['boxoffice'] = 'Richardhj\Isotope\OnlineTickets\Module\BoxOffice';
+$GLOBALS['FE_MOD']['application']['boxoffice'] = BoxOffice::class;
 
 
 /**
