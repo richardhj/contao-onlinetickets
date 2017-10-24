@@ -1,11 +1,20 @@
 <?php
 
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
+
 
 /**
  * Table tl_user
  */
-
-
 foreach ($GLOBALS['TL_DCA']['tl_user']['palettes'] as $name => $palette) {
     if ('__selector__' === $name) {
         continue;
@@ -53,7 +62,7 @@ $GLOBALS['TL_DCA']['tl_user']['fields']['tickets_defineModeAgencyId'] = [
         'tl_class' => 'w50',
     ],
     'options_callback' => function () {
-        $agencies = OnlineTicket\Model\Agency::findAll();
+        $agencies = Richardhj\Isotope\OnlineTickets\Model\Agency::findAll();
         $return   = [];
 
         while ($agencies->next()) {

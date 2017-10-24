@@ -1,17 +1,29 @@
 <?php
 
-namespace OnlineTicket\Helper;
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
+
+
+namespace Richardhj\Isotope\OnlineTickets\Helper;
 
 use Contao\System;
 use Isotope\Model\ProductCollectionItem;
-use OnlineTicket\Model\Ticket;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
 use Isotope\Model\ProductCollection\Order;
 
 
 /**
  * Class Checkout
  *
- * @package OnlineTicket\Helper
+ * @package Richardhj\Isotope\OnlineTickets\Helper
  */
 class Checkout
 {

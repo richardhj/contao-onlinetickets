@@ -1,17 +1,29 @@
 <?php
 
-namespace OnlineTicket\Api\Action;
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
 
-use OnlineTicket\Api\AbstractApi;
-use OnlineTicket\Model\Event;
-use OnlineTicket\Model\Ticket;
-use Haste\Http\Response\JsonResponse;
+
+namespace Richardhj\Isotope\OnlineTickets\Api\Action;
+
+use Richardhj\Isotope\OnlineTickets\Api\AbstractApi;
+use Richardhj\Isotope\OnlineTickets\Model\Event;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 /**
  * Class GetEventsByToken
  *
- * @package OnlineTicket\Api\Action
+ * @package Richardhj\Isotope\OnlineTickets\Api\Action
  */
 class GetEventsByToken extends AbstractApi
 {
@@ -21,10 +33,8 @@ class GetEventsByToken extends AbstractApi
      */
     public function run()
     {
-        // Authenticate token
         $this->authenticateToken();
 
-        /** @var \Model\Collection|Event $events */
         $events = Event::findByUser($this->user->id);
         $return = [];
 

@@ -1,17 +1,29 @@
 <?php
 
-namespace OnlineTicket\Api\Action;
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
+
+
+namespace Richardhj\Isotope\OnlineTickets\Api\Action;
 
 use Contao\Date;
-use Haste\Http\Response\JsonResponse;
-use OnlineTicket\Api\AbstractApi;
-use OnlineTicket\Model\Ticket;
+use Richardhj\Isotope\OnlineTickets\Api\AbstractApi;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 /**
  * Class GetTicketsByToken
  *
- * @package OnlineTicket\Api\Action
+ * @package Richardhj\Isotope\OnlineTickets\Api\Action
  */
 class GetTicketsByToken extends AbstractApi
 {
@@ -21,39 +33,29 @@ class GetTicketsByToken extends AbstractApi
      */
     public function run()
     {
-        // Authenticate token
         $this->authenticateToken();
 
         $tickets = Ticket::findByUser($this->user->id);
-        $return = [];
+        $return  = [];
 
         if (null !== $tickets) {
             while ($tickets->next()) {
                 // Do not include if ticket is older than submitted timestamp
                 if ($this->getParameter('timestamp') > 1
                     && ($tickets->tstamp < $this->getParameter('timestamp')
-                        || ($tickets->checkin
-                            && $tickets->checkin < $this->getParameter('timestamp')))
-                ) {
+                        || ($tickets->checkin && $tickets->checkin < $this->getParameter('timestamp'))
+                    )) {
                     continue;
                 }
 
-                /** @var \Isotope\Model\Address $address */
-                /** @noinspection PhpUndefinedMethodInspection */
                 $address = $tickets->current()->getAddress();
+                $order   = $tickets->getRelated('order_id');
+                $status  = (null === $order) ? null : $order->getRelated('order_status');
 
-                /** @var \Isotope\Model\ProductCollection $order */
-                $order = $tickets->getRelated('order_id');
-
-                /** @var \Isotope\Model\OrderStatus $status */
-                /** @noinspection PhpUndefinedMethodInspection */
-                $status = (null === $order) ? null : $order->getRelated('order_status');
-
-                /** @noinspection PhpUndefinedMethodInspection */
                 $ticket = [
-                    'TicketId'          => (int) $tickets->id,
-                    'EventId'           => (int) $tickets->event_id,
-                    'OrderId'           => (int) $tickets->order_id ?: -(int) $tickets->agency_id,
+                    'TicketId'          => (int)$tickets->id,
+                    'EventId'           => (int)$tickets->event_id,
+                    'OrderId'           => (int)$tickets->order_id ?: -(int)$tickets->agency_id,
                     'TicketCode'        => $tickets->hash,
                     'AttendeeName'      => (null !== $address) ? sprintf(
                         '%s %s',
@@ -61,13 +63,13 @@ class GetTicketsByToken extends AbstractApi
                         $address->lastname
                     ) : 'Anonym', // @todo lang
                     'TicketStatus'      => $tickets->current()->isActivated(),
-                    'Status'            => (null !== $status) ? $status->getName() : '',
+                    'Status'            => (null !== $status) ? $status->name : '',
                     'CheckinPossible'   => $tickets->current()->checkInPossible(),
                     'TicketType'        => $tickets->getRelated('product_id')->name,
                     'TicketTags'        => '', // comma separated string
-                    'TicketCheckinTime' => $tickets->checkin ? Date::parse('d. F, H:i', $tickets->checkin) : '',
+                    'TicketCheckinTime' => $tickets->checkin ? Date::parse('Y-m-d H:i:s O', $tickets->checkin) : '',
                     'TicketInfo'        => $tickets->getRelated('order_id')->notes ?: '',
-                    'TicketBarcode'     => $tickets->event_id . '.' . $tickets->id
+                    'TicketBarcode'     => $tickets->event_id.'.'.$tickets->id,
                 ];
 
                 $return[] = $ticket;
@@ -76,7 +78,7 @@ class GetTicketsByToken extends AbstractApi
 
         $response = new JsonResponse(
             [
-                'Tickets' => $return
+                'Tickets' => $return,
             ]
         );
 

@@ -1,14 +1,35 @@
 <?php
 
-namespace OnlineTicket\Helper;
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
+
+
+namespace Richardhj\Isotope\OnlineTickets\Helper;
+
+use Contao\Config;
+use Contao\Environment;
+use Contao\User;
+use Contao\SessionModel;
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\LogEvent;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 
 /**
- * Class ApiUser
+ * Class ApiUser.
+ * This model does not set a cookie for authentication. Rather the authentication works by passing the token (= strHash)
  *
- * @package OnlineTicket\Helper
+ * @package Richardhj\Isotope\OnlineTickets\Helper
  */
-class ApiUser extends \User
+class ApiUser extends User
 {
 
     /**
@@ -32,7 +53,7 @@ class ApiUser extends \User
      *
      * @var string
      */
-    protected $strCookie = 'API_USER_AUTH';
+    protected $strCookie = 'ONLINE_TICKETS_API_USER_AUTH';
 
 
     /**
@@ -42,7 +63,7 @@ class ApiUser extends \User
     {
         parent::__construct();
 
-        $this->strIp = \Environment::get('ip');
+        $this->strIp = Environment::get('ip');
     }
 
 
@@ -68,11 +89,18 @@ class ApiUser extends \User
      */
     public function authenticate()
     {
-        $session = \SessionModel::findBy(['hash=?', 'name=?'], [$this->strHash, $this->strCookie]);
+        $session = SessionModel::findBy(['hash=?', 'name=?'], [$this->strHash, $this->strCookie]);
 
         // Try to find the session in the database
         if (null === $session) {
-            $this->log('Could not find the session record', __METHOD__, TL_ACCESS);
+            $this->getEventDispatcher()->dispatch(
+                ContaoEvents::SYSTEM_LOG,
+                new LogEvent(
+                    'Could not find the session record',
+                    __METHOD__,
+                    TL_ACCESS
+                )
+            );
 
             return false;
         }
@@ -80,11 +108,18 @@ class ApiUser extends \User
         $time = time();
 
         // Validate the session
-        if ((!\Config::get('disableIpCheck') && $session->ip != $this->strIp)
+        if ((!Config::get('disableIpCheck') && $session->ip !== $this->strIp)
             || $session->hash !== $this->strHash
-            || ($session->tstamp + \Config::get('sessionTimeout')) < $time
+            || ($session->tstamp + Config::get('sessionTimeout')) < $time
         ) {
-            $this->log('Could not verify the session', __METHOD__, TL_ACCESS);
+            $this->getEventDispatcher()->dispatch(
+                ContaoEvents::SYSTEM_LOG,
+                new LogEvent(
+                    'Could not verify the session',
+                    __METHOD__,
+                    TL_ACCESS
+                )
+            );
 
             return false;
         }
@@ -93,7 +128,14 @@ class ApiUser extends \User
 
         // Load the user object
         if (false === $this->findBy('id', $this->intId)) {
-            $this->log('Could not find the session user', __METHOD__, TL_ACCESS);
+            $this->getEventDispatcher()->dispatch(
+                ContaoEvents::SYSTEM_LOG,
+                new LogEvent(
+                    'Could not find the session user',
+                    __METHOD__,
+                    TL_ACCESS
+                )
+            );
 
             return false;
         }
@@ -158,16 +200,24 @@ class ApiUser extends \User
         $time = time();
 
         // Generate the cookie hash
-        $this->strHash = sha1(session_id() . (!\Config::get('disableIpCheck') ? $this->strIp : '') . $this->strCookie);
+        $this->strHash = sha1(session_id().(!Config::get('disableIpCheck') ? $this->strIp : '').$this->strCookie);
 
         // Clean up old sessions
         $this->Database
             ->prepare("DELETE FROM tl_session WHERE tstamp<? OR hash=?")
-            ->execute(($time - \Config::get('sessionTimeout')), $this->strHash);
+            ->execute(($time - Config::get('sessionTimeout')), $this->strHash);
 
         // Save the session in the database
         $this->Database
             ->prepare("INSERT INTO tl_session (pid, tstamp, name, sessionID, ip, hash) VALUES (?, ?, ?, ?, ?, ?)")
             ->execute($this->intId, $time, $this->strCookie, session_id(), $this->strIp, $this->strHash);
+    }
+
+    /**
+     * @return EventDispatcher
+     */
+    private function getEventDispatcher()
+    {
+        return $GLOBALS['container']['event-dispatcher'];
     }
 }

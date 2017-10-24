@@ -1,18 +1,30 @@
 <?php
 
-namespace OnlineTicket\Api\Action;
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
 
-use Haste\Http\Response\JsonResponse;
-use OnlineTicket\Api\AbstractApi;
-use OnlineTicket\Model\Agency;
-use OnlineTicket\Model\Order;
-use OnlineTicket\Model\Ticket;
+
+namespace Richardhj\Isotope\OnlineTickets\Api\Action;
+
+use Richardhj\Isotope\OnlineTickets\Api\AbstractApi;
+use Richardhj\Isotope\OnlineTickets\Model\Agency;
+use Richardhj\Isotope\OnlineTickets\Model\Order;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 /**
  * Class GetOrdersByToken
  *
- * @package OnlineTicket\Api\Action
+ * @package Richardhj\Isotope\OnlineTickets\Api\Action
  */
 class GetOrdersByToken extends AbstractApi
 {
@@ -22,12 +34,10 @@ class GetOrdersByToken extends AbstractApi
      */
     public function run()
     {
-        // Authenticate token
         $this->authenticateToken();
 
-        /** @type \Contao\Model\Collection|Ticket $orders */
-        $orders = Order::findByUser($this->user->id);
         $return = [];
+        $orders = Order::findByUser($this->user->id);
 
         if (null !== $orders) {
             while ($orders->next()) {
@@ -36,18 +46,13 @@ class GetOrdersByToken extends AbstractApi
                     continue;
                 }
 
-                /** @var \Isotope\Model\Address $address */
-                $address = $orders->current()->getAddress();
-
+                $address      = $orders->current()->getAddress();
                 $isotopeOrder = $orders->getRelated('order_id');
                 if (null === $isotopeOrder) {
                     continue;
                 }
 
-                /** @var \Isotope\Model\OrderStatus $status */
-                $status = $isotopeOrder->getRelated('order_status');
-
-                /** @type \Contao\Model\Collection $tickets */
+                $status  = $isotopeOrder->getRelated('order_status');
                 $tickets = Ticket::findByOrder($orders->order_id);
 
                 $order = [
@@ -55,7 +60,7 @@ class GetOrdersByToken extends AbstractApi
                     'CustomerName'     => sprintf('%s %s', $address->firstname, $address->lastname),
                     'TicketsCount'     => $tickets->count(),
                     'TicketsCheckedIn' => Ticket::countBy(['order_id=?', 'checkin<>0'], [$orders->order_id]),
-                    'OrderStatus'      => (null !== $status) ? $status->getName() : '',
+                    'OrderStatus'      => (null !== $status) ? $status->name : '',
                     // ['approved', 'invited', 'chargeback']
                     'EventId'          => (int) $orders->event_id,
                     'OrderTickets'     => array_map('intval', array_values($tickets->fetchEach('id')))
@@ -66,7 +71,6 @@ class GetOrdersByToken extends AbstractApi
         }
 
         // Fetch agencies too
-        /** @var \Model\Collection|Agency $agencies */
         $agencies = Agency::findByUser($this->user->id);
 
         if (null !== $agencies) {
@@ -76,7 +80,6 @@ class GetOrdersByToken extends AbstractApi
                     continue;
                 }
 
-                /** @type \Contao\Model\Collection $objTickets */
                 $tickets = Ticket::findByAgency($agencies->id);
                 if (null === $tickets) {
                     continue;

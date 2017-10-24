@@ -1,16 +1,29 @@
 <?php
 
-namespace OnlineTicket\Api\Action;
+/**
+ * This file is part of richardhj/contao-onlinetickets.
+ *
+ * Copyright (c) 2016-2017 Richard Henkenjohann
+ *
+ * @package   richardhj/contao-onlinetickets
+ * @author    Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright 2016-2017 Richard Henkenjohann
+ * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
+ */
 
-use Haste\Http\Response\JsonResponse;
-use OnlineTicket\Api\AbstractApi;
-use OnlineTicket\Model\Ticket;
+
+namespace Richardhj\Isotope\OnlineTickets\Api\Action;
+
+use Richardhj\Isotope\OnlineTickets\Api\AbstractApi;
+use Richardhj\Isotope\OnlineTickets\Api\ApiErrors;
+use Richardhj\Isotope\OnlineTickets\Model\Ticket;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 /**
  * Class SetTicketAsRegistered
  *
- * @package OnlineTicket\Api\Action
+ * @package Richardhj\Isotope\OnlineTickets\Api\Action
  */
 class SetTicketAsRegistered extends AbstractApi
 {
@@ -20,7 +33,6 @@ class SetTicketAsRegistered extends AbstractApi
      */
     public function run()
     {
-        // Authenticate token
         $this->authenticateToken();
 
         $ticket = Ticket::findByTicketCode($this->getParameter('ticketcode'));
@@ -64,13 +76,6 @@ class SetTicketAsRegistered extends AbstractApi
      */
     protected function exitTicketNotFound()
     {
-        $response = new JsonResponse(
-            [
-                'Errorcode'    => 4,
-                'Errormessage' => $GLOBALS['TL_LANG']['ERR']['onlinetickets_ticket_not_found'],
-            ]
-        );
-
-        $response->send();
+        $this->exitWithError(ApiErrors::TICKET_NOT_FOUND);
     }
 }
