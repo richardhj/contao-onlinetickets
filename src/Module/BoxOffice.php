@@ -62,9 +62,9 @@ class BoxOffice extends AbstractFrontendModule
         $this->Template->translator = $this->getTranslator();
 
         $urlBuilder = UrlBuilder::fromUrl(Environment::get('uri'));
-        $eventId    = $urlBuilder->getQueryParameter('event_id');
+
         //TODO Check permission
-        $event = Event::findByPk($eventId);
+        $event = Event::findByPk($urlBuilder->getQueryParameter('event_id'));
         if (null === $event) {
             $events = Event::findByUser($user->id);
             if (null === $events) {
@@ -157,7 +157,8 @@ class BoxOffice extends AbstractFrontendModule
             }
         }
 
-        $table         = [];
+        $table = [];
+
         $lastCheckedIn =
             Ticket::findBy(['event_id=?', 'checkin<>0'], [$event->id], ['limit' => 10, 'order' => 'checkin DESC']);
         if (null !== $lastCheckedIn) {
@@ -190,7 +191,7 @@ SELECT
         ELSE 1 END)                    AS countCheckedIn
 FROM tl_onlinetickets_tickets t
   LEFT JOIN tl_onlinetickets_agencies a ON t.agency_id = a.id
-WHERE t.event_id = 9
+WHERE t.event_id = ?
       AND t.tstamp <> 0
 GROUP BY a.id
 SQL
