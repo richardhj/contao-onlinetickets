@@ -17,10 +17,13 @@ namespace Richardhj\Isotope\OnlineTickets\Module;
 use Contao\Database;
 use Contao\Environment;
 use Contao\Input;
+use Contao\MemberModel;
 use Contao\PageError403;
+use Contao\PageModel;
 use Contao\UserModel;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
+use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Haste\Form\Form;
 use Haste\Frontend\AbstractFrontendModule;
@@ -50,29 +53,24 @@ class BoxOffice extends AbstractFrontendModule
      */
     protected function compile()
     {
-        global $container, $objPage;
-        /** @var EventDispatcherInterface $dispatcher */
-        $dispatcher = $container['event-dispatcher'];
-
-        $this->Template->translator = $container['translator'];
-
-        $member = $container['user'];
+        $member = $this->getMember();
         $user   = UserModel::findBy('assignedMember', $member->id);
         if (null === $user) {
             return;
         }
 
+        $this->Template->translator = $this->getTranslator();
+
         $urlBuilder = UrlBuilder::fromUrl(Environment::get('uri'));
         $eventId    = $urlBuilder->getQueryParameter('event_id');
-//        $eventId = Input::get('event_id');
         //TODO Check permission
-//        /** @var Model $event */
         $event = Event::findByPk($eventId);
         if (null === $event) {
             $events = Event::findByUser($user->id);
             if (null === $events) {
                 $this->Template->noEvents    = true;
                 $this->Template->noEventsMsg = 'Keine Events';
+
                 return;
             } elseif ($events->count() > 1) {
 //                var_dump('Events ambiguous');
@@ -85,14 +83,14 @@ class BoxOffice extends AbstractFrontendModule
             $ticket   = Ticket::findByPk($ticketId);
             if (!$user->admin && $ticket->checkin_user !== $user->id) {
                 $pageHandler = new PageError403();
-                $pageHandler->generate($objPage->id);
+                $pageHandler->generate($this->getPage()->id);
                 exit;
             }
 
             $ticket->checkin = 0;
             $ticket->save();
 
-            $dispatcher->dispatch(
+            $this->getEventDispatcher()->dispatch(
                 ContaoEvents::CONTROLLER_REDIRECT,
                 new RedirectEvent(
                     $urlBuilder
@@ -118,8 +116,8 @@ class BoxOffice extends AbstractFrontendModule
                 'default'   => 1,
                 'inputType' => 'text',
                 'eval'      => [
-                    'rgxp' => 'digit'
-                ]
+                    'rgxp' => 'digit',
+                ],
             ]
         );
 
@@ -128,18 +126,17 @@ class BoxOffice extends AbstractFrontendModule
             [
                 'label'            => 'Ticketstelle',
                 'inputType'        => 'select',
-                //                'default' => ;
                 'options_callback' => function () use ($event) {
                     $agencies = Agency::findBy(['pid=?', 'box_office_checkin=1'], $event->id);
                     if (null === $agencies) {
                         return [];
                     }
+
                     return $agencies->fetchEach('name');
                 },
                 'eval'             => [
                     'mandatory' => true,
-                    //                    'rgxp' => 'digit'
-                ]
+                ],
             ]
         );
 
@@ -213,5 +210,37 @@ SQL
         $this->Template->ticketCountsHeadline  = 'Eingelassen nach Ticketstelle';
         $this->Template->lastCheckedInTable    = $table;
         $this->Template->ticketCounts          = $countQuery->fetchAllAssoc();
+    }
+
+    /**
+     * @return EventDispatcherInterface
+     */
+    private function getEventDispatcher()
+    {
+        return $GLOBALS['container']['event-dispatcher'];
+    }
+
+    /**
+     * @return TranslatorInterface
+     */
+    private function getTranslator()
+    {
+        return $GLOBALS['container']['translator'];
+    }
+
+    /**
+     * @return MemberModel
+     */
+    private function getMember()
+    {
+        return $GLOBALS['container']['user'];
+    }
+
+    /**
+     * @return PageModel
+     */
+    private function getPage()
+    {
+        return $GLOBALS['objPage'];
     }
 }
