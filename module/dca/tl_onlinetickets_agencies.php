@@ -11,7 +11,7 @@
  * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
  */
 
-use Richardhj\Isotope\OnlineTickets\Helper\Dca;
+use Richardhj\Isotope\OnlineTickets\Dca\Agency as Dca;
 use Richardhj\Isotope\OnlineTickets\Model\Agency;
 use Richardhj\Isotope\OnlineTickets\Model\Event;
 

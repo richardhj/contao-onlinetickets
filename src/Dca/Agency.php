@@ -12,61 +12,30 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Helper;
+namespace Richardhj\Isotope\OnlineTickets\Dca;
 
 use Contao\Backend;
-use Contao\Image;
-use Contao\Message;
-use Contao\System;
+use Contao\Database\Result;
 use Contao\DataContainer;
-use Database\Result;
-use Richardhj\Isotope\OnlineTickets\Model\Agency;
+use Contao\Image;
+use Contao\Validator;
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Message\AddMessageEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\LogEvent;
+use Exception;
+use Richardhj\Isotope\OnlineTickets\Model\Agency as AgencyModel;
 use Richardhj\Isotope\OnlineTickets\Model\Event;
 use Richardhj\Isotope\OnlineTickets\Model\Ticket;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
 /**
  * Class Dca
  *
- * @package Richardhj\Isotope\OnlineTickets\Helper
+ * @package Richardhj\Isotope\OnlineTickets\Dca
  */
-class Dca extends Backend
+class Agency extends Backend
 {
-
-    /**
-     * Disable "delete" button if event's tickets has been sold or agency tickets has been created
-     *
-     * @category button_callback
-     *
-     * @param array  $row
-     * @param string $href
-     * @param string $label
-     * @param string $title
-     * @param string $icon
-     * @param string $attributes
-     *
-     * @return string
-     */
-    public function buttonForEventDelete($row, $href, $label, $title, $icon, $attributes)
-    {
-        $countTickets = 0;
-        $agencies     = Agency::findBy('pid', $row['id']);
-
-        // Count tickets for all event's ticket agencies
-        if (null !== $agencies) {
-            $tickets = Ticket::findMultipleByIds($agencies->fetchEach('id'));
-
-            $countTickets = $tickets->count();
-        }
-
-        if (Ticket::countBy('event_id', $row['id']) || $countTickets) {
-            return Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)) . ' ';
-        }
-
-        return '<a href="' . static::addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title)
-               . '"' . $attributes . '>' . Image::getHtml($icon, $label) . '</a> ';
-    }
-
 
     /**
      * Remove "export pdf" button if event does not have preprinted tickets
@@ -90,10 +59,9 @@ class Dca extends Backend
             return '';
         }
 
-        return '<a href="' . static::addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title)
-               . '"' . $attributes . '>' . Image::getHtml($icon, $label) . '</a> ';
+        return '<a href="'.static::addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title)
+               .'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
     }
-
 
     /**
      * Disable "delete" button if agency's tickets has been created
@@ -112,22 +80,12 @@ class Dca extends Backend
     public function buttonForAgencyDelete($row, $href, $label, $title, $icon, $attributes)
     {
         if (Ticket::countBy('agency_id', $row['id'])) {
-            return Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)) . ' ';
+            return Image::getHtml(preg_replace('/\.gif$/i', '_.gif', $icon)).' ';
         }
 
-        return '<a href="' . static::addToUrl($href . '&amp;id=' . $row['id']) . '" title="' . specialchars($title)
-               . '"' . $attributes . '>' . Image::getHtml($icon, $label) . '</a> ';
+        return '<a href="'.static::addToUrl($href.'&amp;id='.$row['id']).'" title="'.specialchars($title)
+               .'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
     }
-
-
-    public function pdfFormatUnitOptions()
-    {
-        // Include TCPDF config
-        require_once TL_ROOT . '/system/config/tcpdf.php';
-
-        return [PDF_UNIT];
-    }
-
 
     /**
      * List agency in list view
@@ -146,7 +104,6 @@ class Dca extends Backend
             Ticket::countBy('agency_id', $row['id'])
         );
     }
-
 
     /**
      * Return the tickets count for this agency as field
@@ -173,7 +130,7 @@ class Dca extends Backend
      * @param DataContainer $dc
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function saveAgencyTickets($value, $dc)
     {
@@ -182,14 +139,14 @@ class Dca extends Backend
         $oldValue = Ticket::countBy('agency_id', $dc->activeRecord->id);
 
         if ($value < $oldValue) {
-            throw new \Exception('Ticket count for this ticket agency must not become smaller.'); //@todo lang
+            throw new Exception('Ticket count for this ticket agency must not become smaller.'); //@todo lang
         } elseif ($value > $oldValue) {
             $toCreate = $value - $oldValue;
 
             $agency = $dc->activeRecord;
 
             if ($agency instanceof Result) {
-                $agency = new Agency($agency);
+                $agency = new AgencyModel($agency);
             }
 
             $event = $agency->getRelated('pid');
@@ -205,33 +162,39 @@ class Dca extends Backend
                 $ticket->hash      = md5(implode('-', [$event->id, $agency->id, uniqid('', true)]));
 
                 if (!$ticket->save()) {
-                    System::log(
-                        sprintf(
-                            'Could not save ticket for event ID %u and agency ID %u in database.',
-                            $event->id,
-                            $agency->id
-                        ),
-                        __METHOD__,
-                        TL_ERROR
+                    $this->getEventDispatcher()->dispatch(
+                        ContaoEvents::SYSTEM_LOG,
+                        new LogEvent(
+                            sprintf(
+                                'Could not save ticket for event ID %u and agency ID %u in database.',
+                                $event->id,
+                                $agency->id
+                            ),
+                            __METHOD__,
+                            TL_ERROR
+                        )
                     );
 
-                    throw new \Exception('An error while saving the tickets occurred.');
+                    throw new Exception('An error while saving the tickets occurred.');
                 }
             }
 
-            Message::addConfirmation(
-                sprintf(
-                    $GLOBALS['TL_LANG']['MSC']['agencySaveConfirmation'],
-                    $agency->name,
-                    $toCreate,
-                    $toCreate + $oldValue
+            $this->getEventDispatcher()->dispatch(
+                ContaoEvents::MESSAGE_ADD,
+                AddMessageEvent::createConfirm(
+                    sprintf(
+                        $GLOBALS['TL_LANG']['MSC']['agencySaveConfirmation'],
+                        $agency->name,
+                        $toCreate,
+                        $toCreate + $oldValue
+                    )
                 )
             );
+
         }
 
         return '';
     }
-
 
     /**
      * Return the count of recalled agency tickets
@@ -242,17 +205,15 @@ class Dca extends Backend
      * @param DataContainer $dc
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function saveAgencyTicketsRecalled($value, $dc)
     {
-        $value = static::processSimpleCalculation($value, $dc->field);
-
-        /** @var Agency $agency */
+        $value  = static::processSimpleCalculation($value, $dc->field);
         $agency = Agency::findByPk($dc->activeRecord->id);
 
         if ($value > $agency->tickets_generated - $agency->tickets_checkedin) {
-            throw new \Exception(
+            throw new Exception(
                 'Count of recalled tickets has to be smaller/equal than generated tickets and checked in tickets.'
             );
         }
@@ -268,22 +229,30 @@ class Dca extends Backend
      * @param string $field The field name
      *
      * @return string The result as natural number
-     * @throws \Exception
+     * @throws Exception
      */
     private static function processSimpleCalculation($value, $field)
     {
         // Except a digit and an optional simple calculation (e.g. 10+10)
         if (!preg_match('/^(\d+)([\+\-\*\/]\d+)?$/', $value)) {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['natural'], $field));
+            throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['natural'], $field));
         }
 
         eval("\$varValue = $value;");
 
         // Use the default validator for natural numbers
-        if (!\Validator::isNatural($value)) {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['natural'], $field));
+        if (!Validator::isNatural($value)) {
+            throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['natural'], $field));
         }
 
         return $value;
+    }
+
+    /**
+     * @return EventDispatcherInterface
+     */
+    private function getEventDispatcher()
+    {
+        return $GLOBALS['container']['event-dispatcher'];
     }
 }

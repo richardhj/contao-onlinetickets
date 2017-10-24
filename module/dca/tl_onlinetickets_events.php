@@ -12,7 +12,7 @@
  */
 
 
-use Richardhj\Isotope\OnlineTickets\Helper\Dca;
+use Richardhj\Isotope\OnlineTickets\Dca\Event as Dca;
 use Richardhj\Isotope\OnlineTickets\Model\Agency;
 use Richardhj\Isotope\OnlineTickets\Model\Event;
 
