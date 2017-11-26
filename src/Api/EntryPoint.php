@@ -17,6 +17,7 @@ namespace Richardhj\Isotope\OnlineTickets\Api;
 use Contao\Environment;
 use Contao\PageModel;
 use Exception;
+use Isotope\Frontend as IsotopeFrontend;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -41,8 +42,8 @@ class EntryPoint
     public function __construct()
     {
         if (null !== ($page = PageModel::findPublishedFallbackByHostname(Environment::get('httpHost')))) {
-            // Set language
-            $GLOBALS['TL_LANGUAGE'] = $page->language;
+            // Set language, admin mail and such config
+            IsotopeFrontend::loadPageConfig($page);
         }
 
         $this->setAction((string) strtok(basename(Environment::get('requestUri')), '?'));
