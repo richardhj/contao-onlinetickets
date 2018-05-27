@@ -1,7 +1,7 @@
 {
   "name": "richardhj/contao-onlinetickets",
   "description": "Online tickets extension for Isotope eCommerce",
-  "type": "contao-module",
+  "type": "contao-bundle",
   "authors": [
     {
       "name": "Richard Henkenjohann",
@@ -14,7 +14,7 @@
     "email": "richard@henkenjohann.me"
   },
   "require": {
-    "php": "^5.5 || ^7.0",
+    "php": "^7.1",
     "cliffparnitzky/user-member-bridge": "^1.2",
     "contao/core-bundle": "^4.5",
     "contao/manager-plugin": "^2.2",
