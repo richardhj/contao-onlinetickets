@@ -9,6 +9,7 @@ use Contao\ManagerPlugin\Bundle\Config\ConfigInterface;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use Contao\ManagerPlugin\Routing\RoutingPluginInterface;
 use Richardhj\IsotopeOnlineTicketsBundle\RichardhjIsotopeOnlineTicketsBundle;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouteCollection;
@@ -29,13 +30,15 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
     public function getBundles(ParserInterface $parser): array
     {
         return [
+            BundleConfig::create(SecurityBundle::class),
             BundleConfig::create(RichardhjIsotopeOnlineTicketsBundle::class)
                 ->setLoadAfter(
                     [
                         ContaoCoreBundle::class,
-                        'isotope'
+                        SecurityBundle::class,
+                        'isotope',
                     ]
-                )
+                ),
         ];
     }
 

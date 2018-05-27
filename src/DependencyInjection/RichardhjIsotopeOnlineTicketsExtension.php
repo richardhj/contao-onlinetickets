@@ -18,7 +18,7 @@ class RichardhjIsotopeOnlineTicketsExtension extends Extension
      *
      * @var array
      */
-    private $files = [
+    private static $files = [
         'security.yml',
         'services.yml',
     ];
@@ -31,7 +31,7 @@ class RichardhjIsotopeOnlineTicketsExtension extends Extension
      *
      * @throws \Exception If something went wrong.
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
