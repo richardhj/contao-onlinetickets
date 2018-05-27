@@ -12,31 +12,30 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Module;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Module;
 
+use Contao\CoreBundle\Exception\RedirectResponseException;
 use Contao\Database;
 use Contao\Environment;
+use Contao\FrontendUser;
 use Contao\Input;
-use Contao\MemberModel;
 use Contao\PageError403;
 use Contao\PageModel;
+use Contao\System;
 use Contao\UserModel;
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
-use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Haste\Form\Form;
 use Haste\Frontend\AbstractFrontendModule;
-use Richardhj\Isotope\OnlineTickets\Model\Agency;
-use Richardhj\Isotope\OnlineTickets\Model\Event;
-use Richardhj\Isotope\OnlineTickets\Model\Ticket;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Agency;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Event;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Ticket;
+use Symfony\Component\Translation\TranslatorInterface;
 
 
 /**
  * Class BoxOffice
  *
- * @package Richardhj\Isotope\OnlineTickets\Module
+ * @package Richardhj\IsotopeOnlineTicketsBundle\Module
  */
 class BoxOffice extends AbstractFrontendModule
 {
@@ -51,7 +50,7 @@ class BoxOffice extends AbstractFrontendModule
     /**
      * Compile the current element
      */
-    protected function compile()
+    protected function compile(): void
     {
         $member = $this->getMember();
         $user   = UserModel::findBy('assignedMember', $member->id);
@@ -72,7 +71,9 @@ class BoxOffice extends AbstractFrontendModule
                 $this->Template->noEventsMsg = 'Keine Events';
 
                 return;
-            } elseif ($events->count() > 1) {
+            }
+
+            if ($events->count() > 1) {
 //                var_dump('Events ambiguous');
                 return;
             }
@@ -90,15 +91,10 @@ class BoxOffice extends AbstractFrontendModule
             $ticket->checkin = 0;
             $ticket->save();
 
-            $this->getEventDispatcher()->dispatch(
-                ContaoEvents::CONTROLLER_REDIRECT,
-                new RedirectEvent(
-                    $urlBuilder
-                        ->unsetQueryParameter('action')
-                        ->unsetQueryParameter('ticket_id')
-                        ->getUrl()
-                )
-            );
+            throw new RedirectResponseException($urlBuilder
+                ->unsetQueryParameter('action')
+                ->unsetQueryParameter('ticket_id')
+                ->getUrl());
         }
 
         $this->Template->headline = $event->name;
@@ -214,27 +210,19 @@ SQL
     }
 
     /**
-     * @return EventDispatcherInterface
-     */
-    private function getEventDispatcher()
-    {
-        return $GLOBALS['container']['event-dispatcher'];
-    }
-
-    /**
      * @return TranslatorInterface
      */
-    private function getTranslator()
+    private function getTranslator(): TranslatorInterface
     {
-        return $GLOBALS['container']['translator'];
+        return System::getContainer()->get('translator');
     }
 
     /**
-     * @return MemberModel
+     * @return FrontendUser
      */
-    private function getMember()
+    private function getMember(): FrontendUser
     {
-        return $GLOBALS['container']['user'];
+        return FrontendUser::getInstance();
     }
 
     /**

@@ -12,7 +12,7 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Model;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Model;
 
 use Contao\Database;
 use Contao\Model;
@@ -21,7 +21,7 @@ use Contao\Model;
 /**
  * Class Agency
  *
- * @package Richardhj\Isotope\OnlineTickets\Model
+ * @package Richardhj\IsotopeOnlineTicketsBundle\Model
  * @property int    $pid                    The event id
  * @property int    $tstamp                 The timestamp created
  * @property string $name                   The ticket agency name
@@ -108,7 +108,7 @@ class Agency extends Model
             return null;
         }
 
-        $eventIds = implode(',', array_map('intval', $eventIds));
+        $eventIds = implode(',', array_map('\intval', $eventIds));
 
         $t = static::$strTable;
 

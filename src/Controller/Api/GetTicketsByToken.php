@@ -12,43 +12,53 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Api\Action;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Controller\Api;
 
 use Contao\Date;
-use Richardhj\Isotope\OnlineTickets\Api\AbstractApi;
-use Richardhj\Isotope\OnlineTickets\Model\Ticket;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Ticket;
+use Richardhj\IsotopeOnlineTicketsBundle\Security\ApiUser;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
  * Class GetTicketsByToken
  *
- * @package Richardhj\Isotope\OnlineTickets\Api\Action
+ * @package Richardhj\IsotopeOnlineTicketsBundle\Api\Action
  */
-class GetTicketsByToken extends AbstractApi
+class GetTicketsByToken extends Controller
 {
 
     /**
-     * Output all member assigned tickets
+     * @param Request $request
+     *
+     * @return JsonResponse
+     *
+     * @throws \LogicException
      */
-    public function run()
+    public function __invoke(Request $request): JsonResponse
     {
-        $this->authenticateToken();
+        /** @var ApiUser $user */
+        $user = $this->getUser();
 
-        $tickets = Ticket::findByUser($this->user->id);
+        $tickets = Ticket::findByUser($user->id);
         $return  = [];
+
+        $timestamp = $request->query->get('timestamp');
 
         if (null !== $tickets) {
             while ($tickets->next()) {
                 // Do not include if ticket is older than submitted timestamp
-                if ($this->getParameter('timestamp') > 1
-                    && ($tickets->tstamp < $this->getParameter('timestamp')
-                        || ($tickets->checkin && $tickets->checkin < $this->getParameter('timestamp'))
-                    )) {
+                if ($timestamp > 1
+                    && ($tickets->tstamp < $timestamp || ($tickets->checkin && $tickets->checkin < $timestamp))) {
                     continue;
                 }
 
-                $address = $tickets->current()->getAddress();
+                /** @var Ticket $ticketModel */
+                $ticketModel = $tickets->current();
+
+                $address = $ticketModel->getAddress();
                 $order   = $tickets->getRelated('order_id');
                 $status  = (null === $order) ? null : $order->getRelated('order_status');
 
@@ -62,9 +72,9 @@ class GetTicketsByToken extends AbstractApi
                         $address->firstname,
                         $address->lastname
                     ) : 'Anonym', // @todo lang
-                    'TicketStatus'      => $tickets->current()->isActivated(),
+                    'TicketStatus'      => $ticketModel->isActivated(),
                     'Status'            => (null !== $status) ? $status->name : '',
-                    'CheckinPossible'   => $tickets->current()->checkInPossible(),
+                    'CheckinPossible'   => $ticketModel->checkInPossible(),
                     'TicketType'        => $tickets->getRelated('product_id')->name,
                     'TicketTags'        => '', // comma separated string
                     'TicketCheckinTime' => $tickets->checkin ? Date::parse('Y-m-d H:i:s O', $tickets->checkin) : '',
@@ -76,12 +86,10 @@ class GetTicketsByToken extends AbstractApi
             }
         }
 
-        $response = new JsonResponse(
+        return new JsonResponse(
             [
                 'Tickets' => $return,
             ]
         );
-
-        $response->send();
     }
 }

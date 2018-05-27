@@ -12,7 +12,7 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Model;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Model;
 
 use Contao\Database;
 use Haste\Model\Model as HasteModel;
@@ -59,12 +59,16 @@ class Event extends HasteModel
      * @param integer $memberId
      *
      * @return Collection|null
-     * @throws \Exception
      */
-    public static function findByUser($memberId)
+    public static function findByUser($memberId): ?Collection
     {
-        $events = static::getReferenceValues(static::$strTable, 'users', $memberId);
-        if (!is_array($events) || empty($events)) {
+        try {
+            $events = static::getReferenceValues(static::$strTable, 'users', $memberId);
+        } catch (\Exception $e) {
+            return null;
+        }
+
+        if (!\is_array($events) || empty($events)) {
             return null;
         }
 
@@ -72,7 +76,7 @@ class Event extends HasteModel
         $t      = static::$strTable;
 
         return static::findBy(
-            ["$t.id IN(" . $events . ")"],
+            ["$t.id IN(".$events.")"],
             null,
             ['order' => Database::getInstance()->findInSet("$t.id", $events)]
         );

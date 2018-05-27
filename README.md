@@ -74,7 +74,7 @@ To export the online tickets within an isotope document (e.g. the invoice), simp
 Add the following lines to the end of the template file.
 
 ```php
-<?php if (null !== ($objTickets = Richardhj\Isotope\OnlineTickets\Model\Ticket::findByOrder($this->collection->id))): ?><div style="font-size: 72.5%; font-family: Helvetica, sans-serif; float:left; page-break-before:always;">
+<?php if (null !== ($objTickets = Richardhj\IsotopeOnlineTicketsBundle\Model\Ticket::findByOrder($this->collection->id))): ?><div style="font-size: 72.5%; font-family: Helvetica, sans-serif; float:left; page-break-before:always;">
   <table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-left:100px;" >
   	<tr>
   		<td colspan="3" style="text-align:center;"><img src="http://isotopeecommerce.org/files/layout/logo.png" alt="Isotope eCommerce" height="100"></td>
@@ -96,7 +96,7 @@ Add the following lines to the end of the template file.
   	</tr>
   	<tr>
       <td colspan="2" style="line-height:2;">&nbsp;</td>
-      <td rowspan="3"><img src="<?php echo Richardhj\Isotope\OnlineTickets\Helper\QrCode::getLocalPath($objTickets->hash); ?>" alt="Ticket Code"></td>
+      <td rowspan="3"><img src="<?php echo Richardhj\IsotopeOnlineTicketsBundle\Helper\QrCode::getLocalPath($objTickets->hash); ?>" alt="Ticket Code"></td>
   	</tr>
   	<tr>
   	  <td style="line-height:1.5;"><strong>Veranstaltung</strong></td>

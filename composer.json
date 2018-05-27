@@ -16,26 +16,32 @@
   "require": {
     "php": "^5.5 || ^7.0",
     "cliffparnitzky/user-member-bridge": "^1.2",
+    "contao/core-bundle": "^4.5",
+    "contao/manager-plugin": "^2.2",
     "contao-community-alliance/meta-palettes": "^2.0",
     "contao-community-alliance/url-builder": "^1.2",
     "isotope/isotope-core": "^2.3",
     "phpoffice/phpexcel": "^1.8",
+    "symfony/http-kernel": "^3.3 || ^4.0",
+    "symfony/config": "^3.3 || ^4.0",
+    "symfony/framework-bundle": "^3.3 || ^4.0",
+    "symfony/security-core": "^3.3 || ^4.0",
+    "symfony/security-http": "^3.3 || ^4.0",
+    "symfony/security-csrf": "^3.3 || ^4.0",
+    "symfony/translation": "^3.3 || ^4.0",
+    "symfony/routing": "^3.3 || ^4.0",
+    "symfony/dependency-injection": "^3.3 || ^4.0",
     "symfony/http-foundation": "^3.3 || ^4.0"
   },
   "suggest": {
-    "katgirl/isotope-documents": "Enhanced Isotope PDF templates to choose from"
+    "isotope/isotope_documents": "Enhanced Isotope PDF templates to choose from"
   },
   "autoload": {
     "psr-4": {
-      "Richardhj\\Isotope\\OnlineTickets\\": "src/"
+      "Richardhj\\IsotopeOnlineTicketsBundle\\": "src/"
     }
   },
   "extra": {
-    "contao": {
-      "sources": {
-        "entrypoint-api": "api",
-        "module": "system/modules/onlinetickets"
-      }
-    }
+    "contao-manager-plugin": "Richardhj\\IsotopeOnlineTicketsBundle\\ContaoManager\\Plugin"
   }
 }

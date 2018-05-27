@@ -11,7 +11,7 @@
  * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
  */
 
-namespace Richardhj\Isotope\OnlineTickets\Api;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Api;
 
 
 final class ApiErrors
@@ -21,15 +21,15 @@ final class ApiErrors
      * "Unbekanntes Terminal"
      * Standard-Fehler, auch bspw. bei falschen Zugangsdaten bzw. falschem Token
      */
-    const UNKNOWN_TERMINAL = 1;
+    public const UNKNOWN_TERMINAL = 1;
 
     /**
      * "Ticket nicht gefunden"
      */
-    const TICKET_NOT_FOUND = 4;
+    public const TICKET_NOT_FOUND = 4;
 
     /**
      * "Keine Veranstaltungen mit aktiven Ticktes gefunden"
      */
-    const NO_EVENTS = 6;
+    public const NO_EVENTS = 6;
 }

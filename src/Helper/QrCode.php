@@ -12,7 +12,7 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Helper;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Helper;
 
 use Contao\File;
 use Contao\Request;
@@ -21,7 +21,7 @@ use Contao\Request;
 /**
  * Class QrCode
  *
- * @package Richardhj\Isotope\OnlineTickets\Helper
+ * @package Richardhj\IsotopeOnlineTicketsBundle\Helper
  */
 class QrCode
 {
@@ -29,7 +29,7 @@ class QrCode
     /**
      * The api url
      */
-    const API_URL = 'http://api.qrserver.com/v1/create-qr-code/';
+    public const API_URL = 'http://api.qrserver.com/v1/create-qr-code/';
 
 
     /**
@@ -55,7 +55,7 @@ class QrCode
         $strColor = null,
         $strBgColor = null,
         $strFormat = 'png'
-    ) {
+    ): string {
         return static::buildRequestUrl(
             $strData,
             $intSize,
@@ -83,6 +83,8 @@ class QrCode
      * @param string $strFormat
      *
      * @return string
+     *
+     * @throws \Exception
      */
     public static function getLocalPath(
         $strData,
@@ -94,7 +96,7 @@ class QrCode
         $strColor = null,
         $strBgColor = null,
         $strFormat = 'png'
-    ) {
+    ): string {
         $strFileName = md5(serialize(func_get_args()));
         $strPath     = $blnPermanentSave
             ?
@@ -173,7 +175,7 @@ class QrCode
         $strColor = null,
         $strBgColor = null,
         $strFormat = 'png'
-    ) {
+    ): string {
         $arrParams = array
         (
             'data'    => urlencode($strData),

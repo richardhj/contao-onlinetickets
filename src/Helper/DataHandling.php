@@ -12,7 +12,7 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Helper;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Helper;
 
 use Contao\DataContainer;
 use Contao\File;
@@ -21,15 +21,15 @@ use Haste\IO\Reader\ModelCollectionReader;
 use Haste\IO\Writer\CsvFileWriter;
 use Haste\IO\Writer\ExcelFileWriter;
 use Haste\Util\Format;
-use Richardhj\Isotope\OnlineTickets\Model\Agency;
-use Richardhj\Isotope\OnlineTickets\Model\Event;
-use Richardhj\Isotope\OnlineTickets\Model\Ticket;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Agency;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Event;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Ticket;
 
 
 /**
  * Class DataHandling
  *
- * @package Richardhj\Isotope\OnlineTickets\Helper
+ * @package Richardhj\IsotopeOnlineTicketsBundle\Helper
  */
 class DataHandling
 {

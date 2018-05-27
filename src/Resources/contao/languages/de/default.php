@@ -11,7 +11,7 @@
  * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
  */
 
-use Richardhj\Isotope\OnlineTickets\Api\ApiErrors;
+use Richardhj\IsotopeOnlineTicketsBundle\Api\ApiErrors;
 
 
 /**

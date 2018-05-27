@@ -12,13 +12,13 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Model;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Model;
 
 
 /**
  * Class Order
  *
- * @package Richardhj\Isotope\OnlineTickets\Model
+ * @package Richardhj\IsotopeOnlineTicketsBundle\Model
  */
 class Order
 {

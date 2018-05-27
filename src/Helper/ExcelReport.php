@@ -12,7 +12,7 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Helper;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Helper;
 
 use Haste\IO\Reader\ArrayReader;
 use Haste\IO\Writer\ExcelFileWriter;
@@ -21,7 +21,7 @@ use Haste\IO\Writer\ExcelFileWriter;
 /**
  * Class ExcelReport
  *
- * @package Richardhj\Isotope\OnlineTickets\Helper
+ * @package Richardhj\IsotopeOnlineTicketsBundle\Helper
  */
 class ExcelReport extends ExcelFileWriter
 {

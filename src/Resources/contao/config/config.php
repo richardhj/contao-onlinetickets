@@ -11,20 +11,19 @@
  * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
  */
 
-use Richardhj\Isotope\OnlineTickets\Helper\Checkout;
-use Richardhj\Isotope\OnlineTickets\Helper\DataHandling;
-use Richardhj\Isotope\OnlineTickets\Model\Agency;
-use Richardhj\Isotope\OnlineTickets\Model\Event;
-use Richardhj\Isotope\OnlineTickets\Model\Ticket;
-use Richardhj\Isotope\OnlineTickets\Module\BoxOffice;
+use Richardhj\IsotopeOnlineTicketsBundle\Helper\Checkout;
+use Richardhj\IsotopeOnlineTicketsBundle\Helper\DataHandling;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Agency;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Event;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Ticket;
+use Richardhj\IsotopeOnlineTicketsBundle\Module\BoxOffice;
 
 
 /**
  * Back end modules
  */
 $GLOBALS['BE_MOD']['isotope']['onlinetickets_events'] = [
-    'tables'     => [Event::getTable(), Agency::getTable()],
-    'icon'       => 'system/modules/calendar/assets/icon.gif',
+    'tables'     => ['tl_onlinetickets_events', 'tl_onlinetickets_agencies'],
     'report'     => [DataHandling::class, 'exportEventReport'],
     'export'     => [DataHandling::class, 'exportAgencyBarcodes'],
     'export_pdf' => [DataHandling::class, 'exportPreprintedTicketsPdf'],
@@ -40,9 +39,9 @@ $GLOBALS['FE_MOD']['application']['boxoffice'] = BoxOffice::class;
 /**
  * Models
  */
-$GLOBALS['TL_MODELS'][Event::getTable()]  = Event::class;
-$GLOBALS['TL_MODELS'][Ticket::getTable()] = Ticket::class;
-$GLOBALS['TL_MODELS'][Agency::getTable()] = Agency::class;
+$GLOBALS['TL_MODELS']['tl_onlinetickets_events']   = Event::class;
+$GLOBALS['TL_MODELS']['tl_onlinetickets_tickets']  = Ticket::class;
+$GLOBALS['TL_MODELS']['tl_onlinetickets_agencies'] = Agency::class;
 
 
 /**

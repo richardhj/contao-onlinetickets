@@ -12,13 +12,13 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Helper;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Helper;
 
 
 /**
  * Class Code128
  *
- * @package Richardhj\Isotope\OnlineTickets\Helper
+ * @package Richardhj\IsotopeOnlineTicketsBundle\Helper
  */
 class Code128
 {

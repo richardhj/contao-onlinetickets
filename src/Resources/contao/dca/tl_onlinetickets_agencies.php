@@ -11,23 +11,17 @@
  * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
  */
 
-use Richardhj\Isotope\OnlineTickets\Dca\Agency as Dca;
-use Richardhj\Isotope\OnlineTickets\Model\Agency;
-use Richardhj\Isotope\OnlineTickets\Model\Event;
-
-$table  = Agency::getTable();
-$ptable = Event::getTable();
-
+use Richardhj\IsotopeOnlineTicketsBundle\Dca\Agency as Dca;
 
 /**
  * Table tl_onlinetickets_agencies
  */
-$GLOBALS['TL_DCA'][$table] = [
+$GLOBALS['TL_DCA']['tl_onlinetickets_agencies'] = [
 
     // Config
     'config'       => [
         'dataContainer' => 'Table',
-        'ptable'        => $ptable,
+        'ptable'        => 'tl_onlinetickets_events',
         'sql'           => [
             'keys' => [
                 'id' => 'primary',
@@ -59,12 +53,12 @@ $GLOBALS['TL_DCA'][$table] = [
         ],
         'operations'        => [
             'edit'       => [
-                'label' => &$GLOBALS['TL_LANG'][$table]['edit'],
-                'href'  => "table=$table&amp;act=edit",
+                'label' => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['edit'],
+                'href'  => "table='tl_onlinetickets_agencies'&amp;act=edit",
                 'icon'  => 'edit.gif',
             ],
             'delete'     => [
-                'label'           => &$GLOBALS['TL_LANG'][$table]['delete'],
+                'label'           => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['delete'],
                 'href'            => 'act=delete',
                 'icon'            => 'delete.gif',
                 'button_callback' => [Dca::class, 'buttonForAgencyDelete'],
@@ -72,17 +66,17 @@ $GLOBALS['TL_DCA'][$table] = [
                                      .'\'))return false;Backend.getScrollOffset()"',
             ],
             'show'       => [
-                'label' => &$GLOBALS['TL_LANG'][$table]['show'],
+                'label' => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['show'],
                 'href'  => 'act=show',
                 'icon'  => 'show.gif',
             ],
             'export'     => [
-                'label' => &$GLOBALS['TL_LANG'][$table]['export'],
+                'label' => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['export'],
                 'href'  => 'key=export',
                 'icon'  => 'theme_export.gif',
             ],
             'export_pdf' => [
-                'label'           => &$GLOBALS['TL_LANG'][$table]['export_pdf'],
+                'label'           => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['export_pdf'],
                 'href'            => 'key=export_pdf',
                 'icon'            => 'theme_export.gif',
                 'button_callback' => [Dca::class, 'buttonForExportPreprintedTicketsPdf'],
@@ -111,7 +105,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'sql' => "int(10) unsigned NOT NULL auto_increment",
         ],
         'pid'                    => [
-            'foreignKey' => "$ptable.name",
+            'foreignKey' => "'tl_onlinetickets_events'.name",
             'sql'        => "int(10) unsigned NOT NULL default '0'",
             'relation'   => [
                 'type' => 'belongsTo',
@@ -122,7 +116,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
         'name'                   => [
-            'label'     => &$GLOBALS['TL_LANG'][$table]['name'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['name'],
             'inputType' => 'text',
             'exclude'   => true,
             'search'    => true,
@@ -133,7 +127,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'sql'       => "varchar(64) NOT NULL default ''",
         ],
         'count_tickets'          => [
-            'label'         => &$GLOBALS['TL_LANG'][$table]['count_tickets'],
+            'label'         => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['count_tickets'],
             'inputType'     => 'text',
             'eval'          => [
                 'mandatory'      => true,
@@ -149,7 +143,7 @@ $GLOBALS['TL_DCA'][$table] = [
             ],
         ],
         'count_tickets_recalled' => [
-            'label'         => &$GLOBALS['TL_LANG'][$table]['count_tickets_recalled'],
+            'label'         => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['count_tickets_recalled'],
             'inputType'     => 'text',
             'eval'          => [
                 'tl_class'  => 'w50',
@@ -162,7 +156,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'sql'           => "int(5) NOT NULL default '0'",
         ],
         'ticket_price'           => [
-            'label'     => &$GLOBALS['TL_LANG'][$table]['ticket_price'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['ticket_price'],
             'inputType' => 'text',
             'eval'      => [
                 'tl_class' => 'w50',
@@ -171,7 +165,7 @@ $GLOBALS['TL_DCA'][$table] = [
             'sql'       => "varchar(32) NOT NULL default ''",
         ],
         'box_office_checkin'     => [
-            'label'     => &$GLOBALS['TL_LANG'][$table]['box_office_checkin'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_onlinetickets_agencies']['box_office_checkin'],
             'inputType' => 'checkbox',
             'eval'      => [
                 'tl_class' => 'w50 m12',

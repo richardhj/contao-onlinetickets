@@ -1,0 +1,24 @@
+richardhj.onlinetickets.api.user_login:
+    path: /api/userLogin
+    defaults:
+        _controller: richardhj.onlinetickets.controller.api.user_login
+
+richardhj.onlinetickets.api.get_events:
+    path: /api/getEventsByToken
+    defaults:
+        _controller: richardhj.onlinetickets.controller.api.get_events
+
+richardhj.onlinetickets.api.get_orders:
+    path: /api/getOrdersByToken
+    defaults:
+        _controller: richardhj.onlinetickets.controller.api.get_orders
+
+richardhj.onlinetickets.api.get_tickets:
+    path: /api/getTicketsByToken
+    defaults:
+        _controller: richardhj.onlinetickets.controller.api.get_tickets
+
+richardhj.onlinetickets.api.set_ticket_as_registered:
+    path: /api/setTicketAsRegistered
+    defaults:
+        _controller: richardhj.onlinetickets.controller.api.set_ticket_as_registered

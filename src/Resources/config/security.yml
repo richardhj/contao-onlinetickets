@@ -1,0 +1,15 @@
+security:
+    providers:
+        api_key_user_provider:
+            id: richardhj.onlinetickets.security.api_key_user_provider
+
+    firewalls:
+        main:
+            pattern: ^/api
+            stateless: true
+            simple_preauth:
+                authenticator: richardhj.onlinetickets.security.api_key_authenticator
+            provider: api_key_user_provider
+
+    access_control:
+        - { path: ^/api, roles: ROLE_ONLINETICKETS_API }

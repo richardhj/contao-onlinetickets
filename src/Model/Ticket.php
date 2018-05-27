@@ -12,7 +12,7 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Model;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Model;
 
 use Contao\Database;
 use Contao\Model;
@@ -22,7 +22,7 @@ use Isotope\Model\Address;
 /**
  * Class Ticket
  *
- * @package Richardhj\Isotope\OnlineTickets\Model
+ * @package Richardhj\IsotopeOnlineTicketsBundle\Model
  * @property int    $tstamp       The timestamp activated
  * @property int    $event_id     The related event
  * @property int    $product_id   The related product
@@ -168,9 +168,9 @@ class Ticket extends Model
      *
      * @param string $ticketCode
      *
-     * @return Ticket
+     * @return Ticket|null
      */
-    public static function findByTicketCode($ticketCode)
+    public static function findByTicketCode($ticketCode): ?Ticket
     {
         // Ticket code is barcode
         if (false !== strpos($ticketCode, '.')) {
@@ -190,7 +190,7 @@ class Ticket extends Model
      *
      * @return Address
      */
-    public function getAddress()
+    public function getAddress(): Address
     {
         return Address::findOneBy(
             ['pid=?', 'ptable=?'],
@@ -204,7 +204,7 @@ class Ticket extends Model
      *
      * @return bool True if activated
      */
-    public function isActivated()
+    public function isActivated(): bool
     {
         return (0 != $this->checkin);
     }
@@ -215,7 +215,7 @@ class Ticket extends Model
      *
      * @return bool True if check in is possible
      */
-    public function checkInPossible()
+    public function checkInPossible(): bool
     {
         // Check in possible if activation timestamp set and check in timestamp not set
         return (0 != $this->tstamp && 0 == $this->checkin);
@@ -227,7 +227,7 @@ class Ticket extends Model
      *
      * @return bool True if sold online
      */
-    public function isOnline()
+    public function isOnline(): bool
     {
         return (0 != $this->order_id);
     }

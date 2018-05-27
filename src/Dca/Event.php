@@ -12,18 +12,18 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Dca;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Dca;
 
 use Contao\Backend;
 use Contao\Image;
-use Richardhj\Isotope\OnlineTickets\Model\Agency;
-use Richardhj\Isotope\OnlineTickets\Model\Ticket;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Agency;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Ticket;
 
 
 /**
  * Class Dca
  *
- * @package Richardhj\Isotope\OnlineTickets\Dca
+ * @package Richardhj\IsotopeOnlineTicketsBundle\Dca
  */
 class Event extends Backend
 {
@@ -42,7 +42,7 @@ class Event extends Backend
      *
      * @return string
      */
-    public function buttonForEventDelete($row, $href, $label, $title, $icon, $attributes)
+    public function buttonForEventDelete($row, $href, $label, $title, $icon, $attributes): string
     {
         $countTickets = 0;
         $agencies     = Agency::findBy('pid', $row['id']);
@@ -65,7 +65,7 @@ class Event extends Backend
     /**
      * @return array
      */
-    public function pdfFormatUnitOptions()
+    public function pdfFormatUnitOptions(): array
     {
         // Include TCPDF config
         require_once TL_ROOT.'/system/config/tcpdf.php';

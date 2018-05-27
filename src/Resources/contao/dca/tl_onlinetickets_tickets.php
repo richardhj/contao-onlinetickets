@@ -16,17 +16,13 @@ use Contao\UserModel;
 use Isotope\Model\Product;
 use Isotope\Model\ProductCollection\Order;
 use Isotope\Model\ProductCollectionItem;
-use Richardhj\Isotope\OnlineTickets\Model\Agency;
-use Richardhj\Isotope\OnlineTickets\Model\Event;
-use Richardhj\Isotope\OnlineTickets\Model\Ticket;
-
-$table = Ticket::getTable();
-
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Agency;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Event;
 
 /**
  * Table tl_onlinetickets_tickets
  */
-$GLOBALS['TL_DCA'][$table] = [
+$GLOBALS['TL_DCA']['tl_onlinetickets_tickets'] = [
 
     // Config
     'config' => [
@@ -40,73 +36,73 @@ $GLOBALS['TL_DCA'][$table] = [
     // Fields
     'fields' => [
         'id'           => [
-            'label' => &$GLOBALS['TL_LANG'][$table]['id'],
+            'label' => &$GLOBALS['TL_LANG']['tl_onlinetickets_tickets']['id'],
             'sql'   => "int(10) unsigned NOT NULL auto_increment",
         ],
         'tstamp'       => [
-            'label' => &$GLOBALS['TL_LANG'][$table]['tstamp'],
+            'label' => &$GLOBALS['TL_LANG']['tl_onlinetickets_tickets']['tstamp'],
             'sql'   => "int(10) unsigned NOT NULL default '0'",
         ],
         'event_id'     => [
-            'label'    => &$GLOBALS['TL_LANG'][$table]['event_id'],
+            'label'    => &$GLOBALS['TL_LANG']['tl_onlinetickets_tickets']['event_id'],
             'sql'      => "int(10) unsigned NOT NULL default '0'",
             'relation' => [
                 'type'  => 'belongsTo',
                 'load'  => 'lazy',
-                'table' => Event::getTable(),
+                'table' => 'tl_onlinetickets_events',
             ],
         ],
         'product_id'   => [
-            'label'    => &$GLOBALS['TL_LANG'][$table]['product_id'],
+            'label'    => &$GLOBALS['TL_LANG']['tl_onlinetickets_tickets']['product_id'],
             'sql'      => "int(10) unsigned NOT NULL default '0'",
             'relation' => [
                 'type'  => 'belongsTo',
                 'load'  => 'lazy',
-                'table' => Product::getTable(),
+                'table' => 'tl_iso_product',
             ],
         ],
         'order_id'     => [
-            'label'    => &$GLOBALS['TL_LANG'][$table]['order_id'],
+            'label'    => &$GLOBALS['TL_LANG']['tl_onlinetickets_tickets']['order_id'],
             'sql'      => "int(10) unsigned NOT NULL default '0'",
             'relation' => [
                 'type'  => 'belongsTo',
                 'load'  => 'lazy',
-                'table' => Order::getTable(),
+                'table' => 'tl_iso_product_collection',
             ],
         ],
         'item_id'      => [
-            'label'    => &$GLOBALS['TL_LANG'][$table]['item_id'],
+            'label'    => &$GLOBALS['TL_LANG']['tl_onlinetickets_tickets']['item_id'],
             'sql'      => "int(10) unsigned NOT NULL default '0'",
             'relation' => [
                 'type'  => 'belongsTo',
                 'load'  => 'lazy',
-                'table' => ProductCollectionItem::getTable(),
+                'table' => 'tl_iso_product_collection_item',
             ],
         ],
         'agency_id'    => [
-            'label'    => &$GLOBALS['TL_LANG'][$table]['agency_id'],
+            'label'    => &$GLOBALS['TL_LANG']['tl_onlinetickets_tickets']['agency_id'],
             'sql'      => "int(10) unsigned NOT NULL default '0'",
             'relation' => [
                 'type'  => 'belongsTo',
                 'load'  => 'lazy',
-                'table' => Agency::getTable(),
+                'table' => 'tl_onlinetickets_agencies',
             ],
         ],
         'hash'         => [
-            'label' => &$GLOBALS['TL_LANG'][$table]['hash'],
+            'label' => &$GLOBALS['TL_LANG']['tl_onlinetickets_tickets']['hash'],
             'sql'   => "varchar(32) NOT NULL default ''",
         ],
         'checkin'      => [
-            'label' => &$GLOBALS['TL_LANG'][$table]['checkin'],
+            'label' => &$GLOBALS['TL_LANG']['tl_onlinetickets_tickets']['checkin'],
             'sql'   => "int(10) unsigned NOT NULL default '0'",
         ],
         'checkin_user' => [
-            'label'    => &$GLOBALS['TL_LANG'][$table]['checkin_user'],
+            'label'    => &$GLOBALS['TL_LANG']['tl_onlinetickets_tickets']['checkin_user'],
             'sql'      => "int(10) unsigned NOT NULL default '0'",
             'relation' => [
                 'type'  => 'belongsTo',
                 'load'  => 'lazy',
-                'table' => UserModel::getTable(),
+                'table' => 'tl_user',
             ],
         ],
     ],

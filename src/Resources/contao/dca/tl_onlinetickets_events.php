@@ -12,12 +12,7 @@
  */
 
 
-use Richardhj\Isotope\OnlineTickets\Dca\Event as Dca;
-use Richardhj\Isotope\OnlineTickets\Model\Agency;
-use Richardhj\Isotope\OnlineTickets\Model\Event;
-
-$table  = Event::getTable();
-$ctable = Agency::getTable();
+use Richardhj\IsotopeOnlineTicketsBundle\Dca\Event as Dca;
 
 
 /**
@@ -28,7 +23,7 @@ $GLOBALS['TL_DCA'][$table] = [
     // Config
     'config'      => [
         'dataContainer'    => 'Table',
-        'ctable'           => [$ctable],
+        'ctable'           => ['tl_onlinetickets_agencies'],
         'enableVersioning' => true,
         'sql'              => [
             'keys' => [
@@ -84,7 +79,7 @@ $GLOBALS['TL_DCA'][$table] = [
             ],
             'agencies' => [
                 'label' => &$GLOBALS['TL_LANG'][$table]['agencies'],
-                'href'  => "table=$ctable",
+                'href'  => "table='tl_onlinetickets_agencies'",
                 'icon'  => 'tablewizard.gif',
             ],
             'report'   => [

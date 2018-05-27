@@ -36,7 +36,7 @@ $GLOBALS['TL_DCA']['tl_user']['fields']['tickets_testmode'] = [
     'exclude'   => true,
     'inputType' => 'checkbox',
     'eval'      => [
-        'tl_class' => 'w50 m12'
+        'tl_class' => 'w50 m12',
     ],
     'sql'       => "char(1) NOT NULL default ''",
 ];
@@ -62,8 +62,11 @@ $GLOBALS['TL_DCA']['tl_user']['fields']['tickets_defineModeAgencyId'] = [
         'tl_class' => 'w50',
     ],
     'options_callback' => function () {
-        $agencies = Richardhj\Isotope\OnlineTickets\Model\Agency::findAll();
+        $agencies = Richardhj\IsotopeOnlineTicketsBundle\Model\Agency::findAll();
         $return   = [];
+        if (null === $agencies) {
+            return [];
+        }
 
         while ($agencies->next()) {
             $return[$agencies->getRelated('pid')->name][$agencies->id] = $agencies->name;

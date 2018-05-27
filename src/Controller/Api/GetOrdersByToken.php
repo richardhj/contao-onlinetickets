@@ -11,38 +11,48 @@
  * @license   https://github.com/richardhj/contao-onlinetickets/blob/master/LICENSE
  */
 
+namespace Richardhj\IsotopeOnlineTicketsBundle\Controller\Api;
 
-namespace Richardhj\Isotope\OnlineTickets\Api\Action;
-
-use Richardhj\Isotope\OnlineTickets\Api\AbstractApi;
-use Richardhj\Isotope\OnlineTickets\Model\Agency;
-use Richardhj\Isotope\OnlineTickets\Model\Order;
-use Richardhj\Isotope\OnlineTickets\Model\Ticket;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Agency;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Order;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Ticket;
+use Richardhj\IsotopeOnlineTicketsBundle\Security\ApiUser;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 
 /**
  * Class GetOrdersByToken
  *
- * @package Richardhj\Isotope\OnlineTickets\Api\Action
+ * @package Richardhj\IsotopeOnlineTicketsBundle\Api\Action
  */
-class GetOrdersByToken extends AbstractApi
+class GetOrdersByToken extends Controller
 {
 
     /**
      * Output all member assigned orders
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     *
+     * @throws \LogicException
      */
-    public function run()
+    public function __invoke(Request $request): JsonResponse
     {
-        $this->authenticateToken();
+        /** @var ApiUser $user */
+        $user = $this->getUser();
+
+        $timestamp = $request->query->get('timestamp');
 
         $return = [];
-        $orders = Order::findByUser($this->user->id);
+        $orders = Order::findByUser($user->id);
 
         if (null !== $orders) {
             while ($orders->next()) {
                 // Do not include if order is older than submitted timestamp
-                if ($this->getParameter('timestamp') > 1 && $orders->tstamp < $this->getParameter('timestamp')) {
+                if ($timestamp > 1 && $orders->tstamp < $timestamp) {
                     continue;
                 }
 
@@ -54,16 +64,19 @@ class GetOrdersByToken extends AbstractApi
 
                 $status  = $isotopeOrder->getRelated('order_status');
                 $tickets = Ticket::findByOrder($orders->order_id);
+                if (null === $tickets) {
+                    continue;
+                }
 
                 $order = [
-                    'OrderId'          => (int) $orders->order_id,
+                    'OrderId'          => (int)$orders->order_id,
                     'CustomerName'     => sprintf('%s %s', $address->firstname, $address->lastname),
                     'TicketsCount'     => $tickets->count(),
                     'TicketsCheckedIn' => Ticket::countBy(['order_id=?', 'checkin<>0'], [$orders->order_id]),
                     'OrderStatus'      => (null !== $status) ? $status->name : '',
                     // ['approved', 'invited', 'chargeback']
-                    'EventId'          => (int) $orders->event_id,
-                    'OrderTickets'     => array_map('intval', array_values($tickets->fetchEach('id')))
+                    'EventId'          => (int)$orders->event_id,
+                    'OrderTickets'     => array_map('\intval', array_values($tickets->fetchEach('id'))),
                 ];
 
                 $return[] = $order;
@@ -71,12 +84,12 @@ class GetOrdersByToken extends AbstractApi
         }
 
         // Fetch agencies too
-        $agencies = Agency::findByUser($this->user->id);
+        $agencies = Agency::findByUser($user->id);
 
         if (null !== $agencies) {
             while ($agencies->next()) {
                 // Do not include if agency is older than submitted timestamp
-                if ($this->getParameter('timestamp') > 1 && $agencies->tstamp < $this->getParameter('timestamp')) {
+                if ($timestamp > 1 && $agencies->tstamp < $timestamp) {
                     continue;
                 }
 
@@ -86,25 +99,23 @@ class GetOrdersByToken extends AbstractApi
                 }
 
                 $order = [
-                    'OrderId'          => -(int) $agencies->id, # prefix minus to differentiate from online orders
+                    'OrderId'          => -(int)$agencies->id, # prefix minus to differentiate from online orders
                     'CustomerName'     => $agencies->name,
                     'TicketsCount'     => $tickets->count(),
                     'TicketsCheckedIn' => Ticket::countBy(['agency_id=?', 'checkin<>0'], [$agencies->id]),
                     'OrderStatus'      => '',
-                    'EventId'          => (int) $agencies->pid,
-                    'OrderTickets'     => array_map('intval', array_values($tickets->fetchEach('id')))
+                    'EventId'          => (int)$agencies->pid,
+                    'OrderTickets'     => array_map('\intval', array_values($tickets->fetchEach('id'))),
                 ];
 
                 $return[] = $order;
             }
         }
 
-        $response = new JsonResponse(
+        return new JsonResponse(
             [
-                'Orders' => $return
+                'Orders' => $return,
             ]
         );
-
-        $response->send();
     }
 }

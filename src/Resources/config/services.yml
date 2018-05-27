@@ -1,0 +1,27 @@
+services:
+    richardhj.onlinetickets.security.api_key_authenticator:
+        class: Richardhj\IsotopeOnlineTicketsBundle\Security\ApiKeyAuthenticator
+
+    richardhj.onlinetickets.security.api_key_user_provider:
+        class: Richardhj\IsotopeOnlineTicketsBundle\Security\ApiKeyUserProvider
+
+    richardhj.onlinetickets.controller.api.user_login:
+        class: Richardhj\IsotopeOnlineTicketsBundle\Controller\Api\UserLogin
+        arguments:
+            - '@contao.security.authentication_provider.contao_backend'
+            - '@security.csrf.token_generator'
+            - '@contao.translation.translator'
+
+    richardhj.onlinetickets.controller.api.set_ticket_as_registered:
+        class: Richardhj\IsotopeOnlineTicketsBundle\Controller\Api\SetTicketAsRegistered
+        arguments:
+            - '@contao.translation.translator'
+
+    richardhj.onlinetickets.controller.api.get_tickets:
+        class: Richardhj\IsotopeOnlineTicketsBundle\Controller\Api\GetTicketsByToken
+
+    richardhj.onlinetickets.controller.api.get_orders:
+        class: Richardhj\IsotopeOnlineTicketsBundle\Controller\Api\GetOrdersByToken
+
+    richardhj.onlinetickets.controller.api.get_events:
+        class: Richardhj\IsotopeOnlineTicketsBundle\Controller\Api\GetEventsByToken

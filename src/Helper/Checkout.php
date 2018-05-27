@@ -12,18 +12,18 @@
  */
 
 
-namespace Richardhj\Isotope\OnlineTickets\Helper;
+namespace Richardhj\IsotopeOnlineTicketsBundle\Helper;
 
 use Contao\System;
 use Isotope\Model\ProductCollectionItem;
-use Richardhj\Isotope\OnlineTickets\Model\Ticket;
+use Richardhj\IsotopeOnlineTicketsBundle\Model\Ticket;
 use Isotope\Model\ProductCollection\Order;
 
 
 /**
  * Class Checkout
  *
- * @package Richardhj\Isotope\OnlineTickets\Helper
+ * @package Richardhj\IsotopeOnlineTicketsBundle\Helper
  */
 class Checkout
 {
@@ -36,12 +36,17 @@ class Checkout
      * @param Order $order
      *
      * @return boolean
+     *
+     * @throws \Exception
      */
-    public function setTicketsInDatabase(Order $order)
+    public function setTicketsInDatabase(Order $order): bool
     {
         /** @var ProductCollectionItem|\Model $item */
-        foreach ($order->getItems() as $item) {
+        foreach ((array)$order->getItems() as $item) {
             $product = $item->getRelated('product_id');
+            if (null === $product) {
+                continue;
+            }
 
             // Skip if order's item is not a ticket
             if (!$product->getRelated('type')->isTicket) {
@@ -87,10 +92,13 @@ class Checkout
      *
      * @internal param array $tokens
      */
-    public function activateTicketsInDatabase(Order $order)
+    public function activateTicketsInDatabase(Order $order): void
     {
         $time    = time();
         $tickets = Ticket::findByOrder($order->id);
+        if (null === $tickets) {
+            return;
+        }
 
         while ($tickets->next()) {
             $tickets->tstamp = $time;
